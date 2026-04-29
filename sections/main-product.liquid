@@ -98,25 +98,27 @@
                 type="hidden"
                 name="id"
                 value="{{ product.selected_or_first_available_variant.id }}">
-              <div class="product-addons">
-                <p><strong>Add-ons:</strong></p>
-                {% assign extra_shot = all_products['espresso-shot'] %}
-                {% if extra_shot != blank %}
-                  <label>
-                    <input type="checkbox" class="addon-check" value="{{ extra_shot.first_available_variant.id }}"> 
-                    {{ extra_shot.title }} (+{{ extra_shot.price | money }})
-                  </label>
-                {% endif %}
-                <br>
-
-                {% assign extra_milk = all_products['oat-milk'] %}
-                {% if extra_milk != blank %}
-                  <label>
-                    <input type="checkbox" class="addon-check" value="{{ extra_milk.first_available_variant.id }}"> 
-                    {{ extra_milk.title }} (+{{ extra_milk.price | money }})
-                  </label>
-                {% endif %}
-              </div>
+                {% unless product.tags contains 'Food' %}
+                  <div class="product-addons">
+                    <p><strong>Add-ons:</strong></p>
+                    {% assign extra_shot = all_products['espresso-shot'] %}
+                    {% if extra_shot != blank %}
+                      <label>
+                        <input type="checkbox" class="addon-check" value="{{ extra_shot.first_available_variant.id }}"> 
+                        {{ extra_shot.title }} (+{{ extra_shot.price | money }})
+                      </label>
+                      <br>
+                    {% endif %}
+                      
+                    {% assign extra_milk = all_products['oat-milk'] %}
+                    {% if extra_milk != blank %}
+                      <label>
+                        <input type="checkbox" class="addon-check" value="{{ extra_milk.first_available_variant.id }}"> 
+                        {{ extra_milk.title }} (+{{ extra_milk.price | money }})
+                      </label>
+                    {% endif %}
+                  </div>
+                {% endunless %}
               <button type="submit" class="button">Add to Cart</button>
             {% endform %}
         {% endcase %}
