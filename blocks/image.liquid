@@ -1,0 +1,36 @@
+{% if block.settings.image != blank %}
+  <div class="image-block">
+    <img
+    src="{{ block.settings.image | image_url: width: 1200 }}"
+    srcset="
+    {{ block.settings.image | image_url: width: 400 }} 400w,
+    {{ block.settings.image | image_url: width: 800 }} 800w,
+    {{ block.settings.image | image_url: width: 1200 }} 1200w
+    "
+    sizes="max-width: 600px) 100vw, 600px"
+    alt={{  block.settings.image.alt | escape }}"
+    loading="lazy"
+    width="{{ block.settings.image.width }}"
+    height="{{ block.settings.image.height }}"
+    >
+  </div>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Image",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "image",
+        "label": "Image"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Image Block",
+        "category": "Custom"
+      }
+    ]
+  }
+{% endschema %}

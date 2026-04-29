@@ -1,0 +1,30 @@
+<a
+  href="{{ block.settings.button_link }}"
+  class="button"
+>
+  {{ block.settings.button_text | escape }}
+</a>
+
+{% schema %}
+  {
+    "name": "Custom Button",
+    "settings": [
+      {
+        "type": "text",
+        "id": "button_text",
+        "label": "Button Text",
+        "default": "Click me"
+      }, {
+        "type": "url",
+        "id": "button_link",
+        "label": "Button Link"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Custom Button",
+        "category": "Custom"
+      }
+    ]
+  }
+{% endschema %}

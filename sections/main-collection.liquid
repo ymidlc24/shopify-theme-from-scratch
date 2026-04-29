@@ -1,0 +1,68 @@
+{% stylesheet %}
+  .collection-container { display: flex; gap: 40px; margin-top: 40px; min-height: 65vh; }
+  .collection-filters { width: 250px; flex-shrink: 0; }
+  .product-grid-container { flex-grow: 1; }
+  .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .filter-group { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+  .filter-group h3 { font-size: 16px; margin-bottom: 10px; }
+  .product-card img { width: 100%; height: auto; }
+{% endstylesheet %}
+
+<div class="container collection-container">
+  <!-- Sidebar Filters -->
+  <aside class="collection-filters">
+    <form id="FacetFiltersForm">
+      {% for filter in collection.filters %}
+        <div class="filter-group">
+          <h3>{{ filter.label }}</h3>
+          {% case filter.type %}
+            {% when 'list' or 'boolean' %}
+              {% for value in filter.values %}
+                <label>
+                  <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" 
+                    {% if value.active %}checked{% endif %}
+                    {% if value.count == 0 and value.active == false %}disabled{% endif %}>
+                  {{ value.label }} ({{ value.count }})
+                </label><br>
+              {% endfor %}
+            {% when 'price_range' %}
+              <input name="{{ filter.min_value.param_name }}" type="number" placeholder="Min" value="{{ filter.min_value.value | money_without_currency }}">
+              <input name="{{ filter.max_value.param_name }}" type="number" placeholder="Max" value="{{ filter.max_value.value | money_without_currency }}">
+          {% endcase %}
+        </div>
+      {% endfor %}
+    </form>
+  </aside>
+
+  <!-- Product Card -->
+  <div class="product-grid-container" id="ProductGridContainer">
+    <div class="collection-header">
+      <h1>{{ collection.title }}</h1>
+    </div>
+
+    <div class="product-grid">
+      {% for product in collection.products %}
+        <div class="product-card">
+          <a href="{{ product.url }}">
+            <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+            <h2>{{ product.title }}</h2>
+            <p>{{ product.price | money }}</p>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{%  schema  %}
+  {
+    "name": "Main Collection",
+    "tag": "section",
+    "settings": [],
+    "presets": [
+      {
+        "name": "Main Collection"
+      }
+    ]
+  }
+{% endschema %}

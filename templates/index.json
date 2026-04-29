@@ -1,0 +1,35 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "heading": "Welcome to Crooz Cafe!",
+        "subheading": "Discover amazing products at unbeatable prices despite the energy crisis",
+        "button_text": "Shop Now",
+        "button_link": "shopify://collections/hot-cold-beverages",
+        "background_image": "shopify://shop_images/hero_banner.webp",
+        "image_opacity": 0.5,
+        "bg_color_1": "#667eea",
+        "bg_color_2": "#764ba2",
+        "text_color": "#ffffff",
+        "button_color": "#ffffff",
+        "button_text_color": "#667eea",
+        "text_alignment": "center",
+        "section_height": 600
+      }
+    },
+    "featured_collection_K3hh7f": {
+      "type": "featured-collection",
+      "name": "Featured collection",
+      "settings": {
+        "section_title": "Try our popular drinks!",
+        "collection": "hot-cold-beverages",
+        "products_to_show": 3
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured_collection_K3hh7f"
+  ]
+}

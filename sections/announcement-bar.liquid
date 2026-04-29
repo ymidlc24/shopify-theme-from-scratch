@@ -1,0 +1,49 @@
+{% stylesheet %}
+  .announcement-bar {
+    background-color: var(--announcement-bar-bg-color);
+    color: var(--announcement-bar-text-color);
+    padding: 16px 20px;
+    text-align: center;
+    font-weight: 600;
+  }
+{% endstylesheet %}
+
+<div
+  class="announcement-bar"
+  style="
+    --announcement-bar-bg-color: {{ section.settings.background_color }};
+    --announcement-bar-text-color: {{ section.settings.text_color }};
+  "
+>
+  {{ section.settings.announcement_text }}
+</div>
+
+{% schema %}
+  {
+    "name": "Announcement Bar",
+    "settings": [
+      {
+        "type": "text",
+        "id": "announcement_text",
+        "label": "Announcement Text",
+        "default": "Welcome to our store"
+      }, {
+        "type": "color",
+        "id": "background_color",
+        "label": "Background Color",
+        "default": "#000000"
+      }, {
+        "type": "color",
+        "id": "text_color",
+        "label": "Text Color",
+        "default": "#FFFFFF"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Announcement Bar",
+        "category": "Header"
+      }
+    ]
+  }
+{% endschema %}

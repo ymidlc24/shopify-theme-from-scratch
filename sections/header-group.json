@@ -1,0 +1,23 @@
+{
+  "type": "header",
+  "name": "Header Group",
+  "sections": {
+    "announcement_bar_DHrq7G": {
+      "type": "announcement-bar",
+      "name": "Announcement Bar",
+      "settings": {
+        "announcement_text": "Our all new Quarter Pound Burger is coming soon!",
+        "background_color": "#664437",
+        "text_color": "#bcb098"
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {}
+    }
+  },
+  "order": [
+    "announcement_bar_DHrq7G",
+    "header"
+  ]
+}

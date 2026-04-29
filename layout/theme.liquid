@@ -1,0 +1,25 @@
+<html>
+    <head>
+        <title>{{ page_title }}</title>
+        {{ content_for_header }}
+        {%  style  %}
+          {{ settings.heading_font |  font_face: font_display: 'swap' }}
+          {{ settings.body_font |  font_face: font_display: 'swap' }}
+          :root {
+            --font-heading--family: {{ settings.heading_font.family }}, {{ settings.heading_font.fallback_families }};
+            --font-body--family: {{ settings.body_font.family }}, {{ settings.body_font.fallback_families }};
+          }
+        {% endstyle %}
+        <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}" type="text/css" media="all">
+
+        <script src="{{ 'add-on.js' | asset_url }}" defer></script>
+        <script src="{{ 'collection-filter.js' | asset_url }}" defer></script>
+        <script src="{{ 'theme.js' | asset_url }}" defer></script>
+    </head>
+
+    <body>
+        {% sections 'header-group' %}
+        {{ content_for_layout }}
+        {% sections 'footer-group' %}
+    </body>
+</html>

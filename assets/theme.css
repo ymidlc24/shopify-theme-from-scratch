@@ -1,0 +1,84 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body--family);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading--family);
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 20px;
+}
+
+.product-card {
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition:
+    transform 0.3s,
+    box-shadow 0.3s;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+.product-card a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.product-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.product-card h2 {
+  font-size: 1.2rem;
+  margin: 10px 0;
+}
+
+.product-card p {
+  font-size: 1rem;
+  color: #666;
+}
+
+.button {
+  display: inline-block;
+  padding: 14px 36px;
+  background-color: #b35b3a;
+  color: #fff;
+  border: 3px solid #aa4d2a;
+  border-radius: 50px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  line-height: 1;
+  transition: all 0.3s ease;
+}
+
+.button:hover,
+.button:focus {
+  color: #fff;
+  box-shadow: none;
+  border: 3px solid #db8160;
+  outline: none;
+  transform: translateY(-1px);
+}

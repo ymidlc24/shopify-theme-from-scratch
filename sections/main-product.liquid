@@ -1,0 +1,159 @@
+{% stylesheet %}
+  .product-page {
+    display: flex;
+    gap: 40px;
+    margin: 40px 0;
+    align-items: flex-start;
+    min-height: 55vh;
+  }
+
+  .product-image img {
+    width: 400px;
+    height: 400px;
+    object-fit: cover;
+    border-radius: 8px;
+    background: #f5f5f5;
+  }
+
+  .product-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  .product-title {
+    font-size: 2rem;
+    margin-bottom: 16px;
+  }
+
+  .product-price {
+    font-size: 1.5rem;
+    color: #2d2d2d;
+    margin-bottom: 24px;
+  }
+
+  .product-description {
+    color: #555;
+    font-size: 1rem;
+  }
+
+  .product-description {
+    color: #555;
+    font-size: 1rem;
+  }
+
+  .product-metafield {
+    margin-top: 0;
+  }
+
+  .product-details .button {
+    margin-top: 16px;
+  }
+
+  /* Responsive styles for screens smaller than 700px */
+  @media (max-width: 700px) {
+    .product-page {
+      flex-direction: column;
+      gap: 24px;
+      align-items: center;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: auto;
+      max-width: 350px;
+    }
+
+    .product-details {
+      width: 100%;
+    }
+  }
+{% endstylesheet %}
+
+<div class="container">
+  <div class="product-page">
+    <div class="product-image">
+      <img src="{{ product.featured_image | image_url: width: 400 }}" alt="Product Image">
+    </div>
+
+    <div class="product-details">
+      {% for block in section.blocks %}
+        {% case block.type %}
+          {% when 'title' %}
+            <h1 class="product-title">{{ product.title }}</h1>
+          {% when 'description' %}
+            {{ product.description }}
+          {% when 'metafield' %}
+            {% if product.metafields.custom.ingredients %}
+              <h3>{{ 'product.ingredients' | t }}</h3>
+              <p class="product-metafield">{{ product.metafields.custom.ingredients }}</p>
+            {% endif %}
+          {% when 'price' %}
+            <p class="product-price">{{ product.price | money }}</p>
+          {% when 'add_to_cart' %}
+            {% form 'product'
+              , product %}
+              <input
+                type="hidden"
+                name="id"
+                value="{{ product.selected_or_first_available_variant.id }}">
+              <div class="product-addons">
+                <p><strong>Add-ons:</strong></p>
+                {% assign extra_shot = all_products['espresso-shot'] %}
+                {% if extra_shot != blank %}
+                  <label>
+                    <input type="checkbox" class="addon-check" value="{{ extra_shot.first_available_variant.id }}"> 
+                    {{ extra_shot.title }} (+{{ extra_shot.price | money }})
+                  </label>
+                {% endif %}
+                <br>
+
+                {% assign extra_milk = all_products['oat-milk'] %}
+                {% if extra_milk != blank %}
+                  <label>
+                    <input type="checkbox" class="addon-check" value="{{ extra_milk.first_available_variant.id }}"> 
+                    {{ extra_milk.title }} (+{{ extra_milk.price | money }})
+                  </label>
+                {% endif %}
+              </div>
+              <button type="submit" class="button">Add to Cart</button>
+            {% endform %}
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+  {
+    "name": "Main Product",
+    "tag": "section",
+    "blocks": [
+      {
+        "type": "@app"
+      },
+      {
+        "type": "title",
+        "name": "Title"
+      }, {
+        "type": "description",
+        "name": "Description"
+      }, {
+        "type": "metafield",
+        "name": "Metafield"
+      },  {
+        "type": "price",
+        "name": "Price"
+      }, {
+        "type": "add_to_cart",
+        "name": "Add to Cart Button"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Main Product"
+      }
+    ]
+  }
+{% endschema %}

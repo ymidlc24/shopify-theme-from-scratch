@@ -1,0 +1,30 @@
+{
+  "type": "footer",
+  "name": "Footer Group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu_McbibR": {
+          "type": "menu",
+          "settings": {
+            "menu_title": "Quick Links",
+            "menu_links": "footer"
+          }
+        },
+        "newsletter_HAae4A": {
+          "type": "newsletter",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "menu_McbibR",
+        "newsletter_HAae4A"
+      ],
+      "settings": {}
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

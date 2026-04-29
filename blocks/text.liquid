@@ -1,0 +1,62 @@
+{% assign tag = block.settings.tag | default: 'p' %}
+<{{ tag }} class="text-block">
+  {{ block.settings.text }}
+  </{{ tag }}>
+
+  {% schema %}
+    {
+      "name": "Text Block",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Text",
+          "default": "Your text here"
+        }, {
+          "type": "select",
+          "id": "tag",
+          "label": "HTML Element",
+          "options": [
+            {
+              "value": "p",
+              "label": "Paragraph"
+            },
+            {
+              "value": "h1",
+              "label": "Heading 1"
+            },
+            {
+              "value": "h2",
+              "label": "Heading 2"
+            },
+            {
+              "value": "h3",
+              "label": "Heading 3"
+            }, {
+              "value": "h4",
+              "label": "Heading 4"
+            }, {
+              "value": "h5",
+              "label": "Heading 5"
+            }, {
+              "value": "h6",
+              "label": "Heading 6"
+            }, {
+              "value": "div",
+              "label": "Div"
+            }, {
+              "value": "span",
+              "label": "Span"
+            }
+          ],
+          "default": "p"
+        }
+      ],
+      "presets": [
+        {
+          "name": "Text Block",
+          "category": "Custom"
+        }
+      ]
+    }
+  {% endschema %}

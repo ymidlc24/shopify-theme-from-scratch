@@ -1,0 +1,10 @@
+{
+  "cart": {
+    "title": "Ang iyong Cart",
+    "empty": "Walang laman ang iyong cart.",
+    "continue_shopping": "Magpatuloy sa Pagbili"
+  },
+  "product": {
+    "ingredients": "Sangkap",
+  }
+}

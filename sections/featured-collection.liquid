@@ -1,0 +1,73 @@
+{% stylesheet %}
+  .featured-collection {
+    margin: 2rem 0;
+    padding: 2rem 1rem;
+    background-color: #fafafa;
+    border-radius: 8px;
+  }
+
+  .featured-collection h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-align: left;
+  }
+
+  .featured-collection__products {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+{% endstylesheet %}
+
+{% assign featured_collection = collections[section.settings.collection] %}
+
+{% if section.settings.collection != blank and featured_collection %}
+  {% if featured_collection.products_count > 0 %}
+    <section class="featured-collection">
+      <div class="container">
+        <h2>{{ section.settings.section_title | default: featured_collection.title }}</h2>
+        <div class="featured-collection__products">
+          {% for product in featured_collection.products limit: section.settings.products_to_show %}
+            <div class="product-card">
+              <a href="{{ product.url }}">
+                <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
+                <h2>{{ product.title }}</h2>
+                <p>{{ product.price | money }}</p>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+    </section>
+  {% endif %}
+{% else %}
+  <p>No collection selected or collection is empty.</p>
+{% endif %}
+
+{% schema %}
+  {
+    "name": "Featured collection",
+    "settings": [
+      {
+        "type": "text",
+        "id": "section_title",
+        "label": "Section title"
+      },
+      {
+        "type": "collection",
+        "id": "collection",
+        "label": "Collection"
+      }, {
+        "type": "number",
+        "id": "products_to_show",
+        "label": "Number of products to show",
+        "default": 4
+      }
+    ],
+    "presets": [
+      {
+        "name": "Featured collection",
+        "category": "General"
+      }
+    ]
+  }
+{% endschema %}
