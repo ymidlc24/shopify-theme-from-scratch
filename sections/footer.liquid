@@ -1,148 +1,47 @@
-{% stylesheet %}
-  .footer-section {
-    background-color: #4e2b1c;
-    color: #fff;
-    padding: 48px 0;
-  }
-
-  .footer-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 40px;
-  }
-
-  .footer-menu {
-    flex: 1 1 220px;
-  }
-
-  .footer-menu h2 {
-    font-size: 1.2rem;
-    margin-bottom: 16px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .footer-menu ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-  }
-
-  .footer-menu li {
-    margin-bottom: 10px;
-  }
-
-  .footer-menu a {
-    color: #fff;
-    text-decoration: none;
-    transition: color 0.2s;
-  }
-
-  .footer-menu a:hover {
-    color: #ffb347;
-  }
-
-  .footer-newsletter {
-    flex: 1 1 320px;
-    max-width: 400px;
-  }
-
-  .footer-newsletter h2 {
-    font-size: 1.2rem;
-    margin-bottom: 16px;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-  }
-
-  .footer-newsletter form {
-    display: flex;
-    gap: 8px;
-    margin-top: 8px;
-  }
-
-  .footer-newsletter input[type="email"] {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 3px 0 0 3px;
-    font-size: 1rem;
-  }
-
-  .footer-newsletter button {
-    display: inline-block;
-    padding: 14px 36px;
-    background-color: #b35b3a;
-    color: #fff;
-    border: 3px solid #aa4d2a;
-    border-radius: 50px;
-    font-family: inherit;
-    font-size: 13px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-    line-height: 1;
-    transition: all 0.3s ease;
-  }
-
-  .footer-newsletter button:hover {
-    color: #fff;
-    box-shadow: none;
-    outline: none;
-    transform: translateY(-1px);
-  }
-
-  @media (max-width: 800px) {
-    .footer-container {
-      flex-direction: column;
-      gap: 32px;
-      align-items: flex-start;
-    }
-
-    .footer-newsletter {
-      max-width: 100%;
-    }
-  }
-{% endstylesheet %}
-
-<footer class="footer-section">
-  <div class="footer-container container">
+<footer class="tw:bg-[#4e2b1c] tw:text-[#fff] tw:py-[48px]">
+  <div class="container tw:mx-auto tw:flex tw:flex-wrap tw:gap-[40px]">
     {% for block in section.blocks %}
       {% case block.type %}
         {% when 'menu' %}
-          <div class="footer-menu">
-            <h2>{{ block.settings.menu_title }}</h2>
-            <ul>
+          <div class="tw:flex-1 tw:min-w-[200px]">
+            <h2 class="tw:text-[1.2rem] tw:mb-[16px] tw:tracking-[1px] tw:uppercase tw:font-bold">
+              {{ block.settings.menu_title }}
+            </h2>
+
+            <ul class="tw:list-none tw:p-0 tw:m-0">
               {% for link in linklists[block.settings.menu_links].links %}
-                <li>
-                  <a href="{{ link.url }}">{{ link.title }}</a>
+                <li class="tw:mb-[10px]">
+                  <a href="{{ link.url }}" class="tw:text-[#fff] tw:no-underline tw:transition-colors tw:duration-[0.2s] tw:hover:text-[#ffb347]">
+                    {{ link.title }}
+                  </a>
                 </li>
               {% endfor %}
             </ul>
           </div>
+
         {% when 'newsletter' %}
-          <div class="footer-newsletter">
-            <h2>Newsletter</h2>
-            <p>Sign up to get the latest updates and offers.</p>
-            {% form 'contact' %}
-              <input
-                type="hidden"
-                name="form_type"
-                value="customer">
-              <input
-                type="hidden"
-                name="utf8"
-                value="✓">
+          <div class="tw:flex-1 tw:min-w-[300px] tw:max-w-full md:tw:max-w-[450px]">
+            <h2 class="tw:text-[1.2rem] tw:mb-[16px] tw:tracking-[1px] tw:uppercase tw:font-bold">Newsletter</h2>
+            <p class="tw:mb-2">Sign up to get the latest updates and offers.</p>
+           
+            {% form 'contact', class: 'tw:flex tw:items-stretch tw:mt-[8px]' %}
+              <input type="hidden" name="form_type" value="customer">
+              <input type="hidden" name="utf8" value="✓">
+              
               <input
                 type="email"
                 name="contact[email]"
                 placeholder="Your email address"
-                aria-label="Email address"
-                required>
-              <button class="button" type="submit">Subscribe</button>
+                class="tw:flex-1 tw:p-[10px] tw:border tw:border-[#ddd] tw:rounded-l-[4px] tw:text-[1rem] tw:text-black tw:bg-white tw:outline-none tw:min-w-0"
+                required
+              >
+              
+              <button 
+                type="submit" 
+                class="tw:bg-[#b35b3a] tw:text-white tw:px-[24px] tw:border tw:border-[#aa4d2a] tw:border-l-0 tw:rounded-r-[4px] tw:text-[13px] tw:font-bold tw:uppercase tw:tracking-widest tw:transition-all tw:hover:bg-[#db8160] tw:whitespace-nowrap"
+              >
+                Subscribe
+              </button>
             {% endform %}
           </div>
       {% endcase %}
@@ -160,12 +59,11 @@
         "name": "Footer Menu",
         "settings": [
           {
-          "type": "text", 
-          "id": "menu_title",
-          "label": "Menu Title",
-          "default": "Quick Links"
-          },
-          {
+            "type": "text",
+            "id": "menu_title",
+            "label": "Menu Title",
+            "default": "Quick Links"
+          }, {
             "type": "link_list",
             "id": "menu_links",
             "label": "Menu Links"

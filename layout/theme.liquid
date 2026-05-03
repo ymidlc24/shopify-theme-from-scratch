@@ -12,6 +12,8 @@
         {% endstyle %}
         <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}" type="text/css" media="all">
 
+        {{ 'application.css' | asset_url | stylesheet_tag }}
+
         <script src="{{ 'add-on.js' | asset_url }}" defer></script>
         <script src="{{ 'collection-filter.js' | asset_url }}" defer></script>
         <script src="{{ 'theme.js' | asset_url }}" defer></script>

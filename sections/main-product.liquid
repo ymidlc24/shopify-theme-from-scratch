@@ -1,125 +1,63 @@
-{% stylesheet %}
-  .product-page {
-    display: flex;
-    gap: 40px;
-    margin: 40px 0;
-    align-items: flex-start;
-    min-height: 55vh;
-  }
-
-  .product-image img {
-    width: 400px;
-    height: 400px;
-    object-fit: cover;
-    border-radius: 8px;
-    background: #f5f5f5;
-  }
-
-  .product-details {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-
-  .product-title {
-    font-size: 2rem;
-    margin-bottom: 16px;
-  }
-
-  .product-price {
-    font-size: 1.5rem;
-    color: #2d2d2d;
-    margin-bottom: 24px;
-  }
-
-  .product-description {
-    color: #555;
-    font-size: 1rem;
-  }
-
-  .product-description {
-    color: #555;
-    font-size: 1rem;
-  }
-
-  .product-metafield {
-    margin-top: 0;
-  }
-
-  .product-details .button {
-    margin-top: 16px;
-  }
-
-  /* Responsive styles for screens smaller than 700px */
-  @media (max-width: 700px) {
-    .product-page {
-      flex-direction: column;
-      gap: 24px;
-      align-items: center;
-    }
-
-    .product-image img {
-      width: 100%;
-      height: auto;
-      max-width: 350px;
-    }
-
-    .product-details {
-      width: 100%;
-    }
-  }
-{% endstylesheet %}
-
-<div class="container">
-  <div class="product-page">
-    <div class="product-image">
-      <img src="{{ product.featured_image | image_url: width: 400 }}" alt="Product Image">
+<div class="container tw:mx-auto">
+  <div class="tw:flex tw:gap-[40px] tw:my-[40px] tw:items-start tw:min-h-[55vh]">
+    <div class="tw:shrink-0">
+      <img 
+        src="{{ product.featured_image | image_url: width: 400 }}" 
+        alt="{{ product.title }}"
+        class="tw:w-[400px] tw:h-[400px] tw:object-cover tw:rounded-[8px] tw:bg-[#f5f5f5]"
+        width="400px"
+        height="400px"
+      >
     </div>
 
-    <div class="product-details">
+    <div class="tw:flex-1 tw:flex tw:flex-col">
       {% for block in section.blocks %}
         {% case block.type %}
           {% when 'title' %}
-            <h1 class="product-title">{{ product.title }}</h1>
+            <h1 class="tw:text-[2rem] tw:font-bold tw:mb-[16px]">{{ product.title }}</h1>
+          
           {% when 'description' %}
-            {{ product.description }}
+            <div class="tw:text-[#555] tw:text-[1rem]">
+              {{ product.description }}
+            </div>
+
           {% when 'metafield' %}
             {% if product.metafields.custom.ingredients %}
-              <h3>{{ 'product.ingredients' | t }}</h3>
-              <p class="product-metafield">{{ product.metafields.custom.ingredients }}</p>
+              <div class="tw:mt-0">
+                <h3 class="tw:font-bold">{{ 'product.ingredients' | t }}</h3>
+                <p class="tw:text-[#555] tw:text-[1rem]">{{ product.metafields.custom.ingredients }}</p>
+              </div>
             {% endif %}
+
           {% when 'price' %}
-            <p class="product-price">{{ product.price | money }}</p>
+            <p class="tw:text-[1.5rem] tw:text-[#2d2d2d] tw:mb-[24px]">{{ product.price | money }}</p>
+
           {% when 'add_to_cart' %}
-            {% form 'product'
-              , product %}
-              <input
-                type="hidden"
-                name="id"
-                value="{{ product.selected_or_first_available_variant.id }}">
-                {% unless product.tags contains 'Food' %}
-                  <div class="product-addons">
-                    <p><strong>Add-ons:</strong></p>
-                    {% assign extra_shot = all_products['espresso-shot'] %}
-                    {% if extra_shot != blank %}
-                      <label>
-                        <input type="checkbox" class="addon-check" value="{{ extra_shot.first_available_variant.id }}"> 
-                        {{ extra_shot.title }} (+{{ extra_shot.price | money }})
-                      </label>
-                      <br>
-                    {% endif %}
-                      
-                    {% assign extra_milk = all_products['oat-milk'] %}
-                    {% if extra_milk != blank %}
-                      <label>
-                        <input type="checkbox" class="addon-check" value="{{ extra_milk.first_available_variant.id }}"> 
-                        {{ extra_milk.title }} (+{{ extra_milk.price | money }})
-                      </label>
-                    {% endif %}
-                  </div>
-                {% endunless %}
-              <button type="submit" class="button">Add to Cart</button>
+            {% form 'product', product %}
+              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
+              
+              {% unless product.has_only_default_variant %}
+                <div class="tw:mb-[20px]">
+                  {% for option in product.options_with_values %}
+                    <div class="tw:mb-[10px]">
+                      <label class="tw:block tw:font-bold">{{ option.name }}</label>
+                      <select class="variant-select tw:p-[8px] tw:w-full tw:rounded-[4px] tw:border tw:border-[#ccc]" data-index="option{{ forloop.index }}">
+                        {% for value in option.values %}
+                          <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>
+                            {{ value }}
+                          </option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                  {% endfor %}
+                </div>
+              {% endunless %}
+
+              {% render 'btn-primary', 
+                 text: 'Add to Cart', 
+                 type: 'submit', 
+                 class: 'tw:mt-[16px]' 
+              %}
             {% endform %}
         {% endcase %}
       {% endfor %}

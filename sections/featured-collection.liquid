@@ -1,46 +1,23 @@
-{% stylesheet %}
-  .featured-collection {
-    margin: 2rem 0;
-    padding: 2rem 1rem;
-    background-color: #fafafa;
-    border-radius: 8px;
-  }
-
-  .featured-collection h2 {
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
-    text-align: left;
-  }
-
-  .featured-collection__products {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
-  }
-{% endstylesheet %}
-
 {% assign featured_collection = collections[section.settings.collection] %}
 
 {% if section.settings.collection != blank and featured_collection %}
   {% if featured_collection.products_count > 0 %}
-    <section class="featured-collection">
-      <div class="container">
-        <h2>{{ section.settings.section_title | default: featured_collection.title }}</h2>
-        <div class="featured-collection__products">
+    <section class="tw:my-[2rem] tw:p-[2rem_1rem] tw:bg-[#fafafa] tw:rounded-[8px]">
+      <div class="container tw:mx-auto">
+        <h2 class="tw:text-[2rem] tw:mb-[1.5rem] tw:text-left tw:font-bold">
+          {{ section.settings.section_title | default: featured_collection.title }}
+        </h2>
+
+        <div class="tw:grid tw:grid-cols-3 tw:gap-[20px]">
           {% for product in featured_collection.products limit: section.settings.products_to_show %}
-            <div class="product-card">
-              <a href="{{ product.url }}">
-                <img src="{{ product.featured_image | img_url: 'medium' }}" alt="{{ product.title }}">
-                <h2>{{ product.title }}</h2>
-                <p>{{ product.price | money }}</p>
-              </a>
-            </div>
+            {% render 'product-card', product: product %}
           {% endfor %}
         </div>
+      </div>
     </section>
   {% endif %}
 {% else %}
-  <p>No collection selected or collection is empty.</p>
+  <p class="tw:p-10 tw:text-center tw:text-gray-500">No collection selected or collection is empty.</p>
 {% endif %}
 
 {% schema %}

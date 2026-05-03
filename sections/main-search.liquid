@@ -1,0 +1,82 @@
+{% paginate search.results by 12 %}
+  <div class="container tw:mx-auto tw:flex tw:gap-[40px] tw:mt-[40px] tw:min-h-[65vh]">
+    <aside class="tw:w-[250px] tw:shrink-0">
+      <form id="FacetFiltersForm">
+        {% for filter in search.filters %}
+          <div class="tw:mb-[20px] tw:border-b tw:border-[#eee] tw:pb-[10px]">
+            <h3 class="tw:text-[16px] tw:mb-[10px] tw:font-bold">{{ filter.label }}</h3>
+            {% case filter.type %}
+              {% when 'list' or 'boolean' %}
+                {% for value in filter.values %}
+                  <label class="tw:block tw:cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="{{ value.param_name }}"
+                      value="{{ value.value }}"
+                      {% if value.active %}
+                      checked{% endif %}
+                      {% if value.count == 0 and value.active == false %}
+                      disabled{% endif %}>
+                    {{ value.label }} ({{ value.count }})
+                  </label>
+                {% endfor %}
+              {% when 'price_range' %}
+                <div class="tw:flex tw:gap-2">
+                  <input
+                    class="tw:w-full tw:border tw:p-1"
+                    name="{{ filter.min_value.param_name }}"
+                    type="number"
+                    placeholder="Min"
+                    value="{{ filter.min_value.value | money_without_currency }}">
+                  <input
+                    class="tw:w-full tw:border tw:p-1"
+                    name="{{ filter.max_value.param_name }}"
+                    type="number"
+                    placeholder="Max"
+                    value="{{ filter.max_value.value | money_without_currency }}">
+                </div>
+            {% endcase %}
+          </div>
+        {% endfor %}
+      </form>
+    </aside>
+
+    <div class="tw:grow" id="ProductGridContainer">
+      <div class="tw:mb-6">
+        <h1 class="tw:text-2xl tw:font-bold">
+          {% if search.performed %}
+            Results for "{{ search.terms }}" ({{ search.results_count }})
+          {% else %}
+            Search our store
+          {% endif %}
+        </h1>
+      </div>
+
+      {% if search.performed and search.results_count > 0 %}
+        <div class="tw:grid tw:grid-cols-3 tw:gap-[20px]">
+          {% for item in search.results %}
+            {% render 'product-card'
+              , product: item %}
+          {% endfor %}
+        </div>
+
+        {% if paginate.pages > 1 %}
+          <div class="tw:mt-10 tw:flex tw:justify-center">
+            {{ paginate | default_pagination }}
+          </div>
+        {% endif %}
+      {% else %}
+        <div class="tw:py-20 tw:text-center">
+          <p class="tw:text-gray-500">No products found. Try a different search term.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+{% endpaginate %}
+
+{% schema %}
+  {
+    "name": "Main Search",
+    "settings": []
+  }
+{% endschema %}

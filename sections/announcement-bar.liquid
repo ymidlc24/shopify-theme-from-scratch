@@ -1,18 +1,8 @@
-{% stylesheet %}
-  .announcement-bar {
-    background-color: var(--announcement-bar-bg-color);
-    color: var(--announcement-bar-text-color);
-    padding: 16px 20px;
-    text-align: center;
-    font-weight: 600;
-  }
-{% endstylesheet %}
-
 <div
-  class="announcement-bar"
+  class="tw:text-center tw:font-semibold tw:p-[16px_20px]"
   style="
-    --announcement-bar-bg-color: {{ section.settings.background_color }};
-    --announcement-bar-text-color: {{ section.settings.text_color }};
+    background-color: {{ section.settings.background_color }};
+    color: {{ section.settings.text_color }};
   "
 >
   {{ section.settings.announcement_text }}

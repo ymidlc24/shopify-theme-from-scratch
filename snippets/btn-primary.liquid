@@ -1,0 +1,21 @@
+{% comment %}
+  Usage: {% render 'btn-primary', text: section.settings.button_text, type: 'submit', class: 'tw:bg-[#d97e4d] ...' %}
+{% endcomment %}
+
+{%- liquid
+  # Base structural styles shared by all buttons
+  assign base_styles = "tw:inline-block tw:px-[36px] tw:py-[14px] tw:text-white tw:font-bold tw:uppercase tw:tracking-[0.15em] tw:leading-none tw:cursor-pointer tw:text-center tw:no-underline tw:transition-all tw:duration-300 tw:hover:translate-y-[-1px] tw:focus:outline-none"
+  
+  # Default styles (brown) only apply if NO custom background is passed in
+  assign default_styles = ""
+  unless class contains 'tw:bg-'
+    assign default_styles = "tw:bg-[#b35b3a] tw:border-[3px] tw:border-[#aa4d2a] tw:rounded-[50px] tw:hover:border-[#db8160]"
+  endunless
+-%}
+
+<button 
+  type="{{ type | default: 'button' }}"
+  class="{{ base_styles }} {{ default_styles }} {{ class }}"
+>
+  {{ text }}
+</button>

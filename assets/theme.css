@@ -18,7 +18,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 0 20px;
 }
 
-.product-card {
+/* .product-card {
   text-align: left;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition:
@@ -81,4 +81,4 @@ h1, h2, h3, h4, h5, h6 {
   border: 3px solid #db8160;
   outline: none;
   transform: translateY(-1px);
-}
+} */

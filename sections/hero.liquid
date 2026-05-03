@@ -1,84 +1,26 @@
-{% stylesheet %}
-  .hero-section {
-    background-size: cover;
-    background-position: center;
-  }
-
-  .hero-content {
-    margin: 0 auto;
-    text-align: center;
-    background: rgba(255, 255, 255, 0.5);
-    padding: 40px 30px;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .hero-heading {
-    font-size: 3rem;
-    font-weight: bold;
-    margin-bottom: 30px;
-  }
-
-  .hero-subheading {
-    font-size: 1.25rem;
-    margin-bottom: 60px;
-  }
-
-  .hero-button {
-    display: inline-block;
-    padding: 14px 40px;
-    background-color: #d97e4d;
-    color: #ffffff;
-    text-decoration: none;
-    font-weight: 600;
-    border-radius: 25px;
-    transition: all 0.3s ease;
-    border: none;
-    cursor: pointer;
-    font-size: 1rem;
-    margin: 0 10px;
-    box-shadow: 0 4px 15px rgba(217, 126, 77, 0.4);
-    width: fit-content;
-  }
-
-  .hero-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(217, 126, 77, 0.6);
-    background-color: #c96b39;
-  }
-
-  @media (max-width: 768px) {
-    .hero-heading {
-      font-size: 2.5rem;
-    }
-
-    .hero-subheading {
-      font-size: 1rem;
-    }
-
-    .hero-content {
-      padding: 20px;
-    }
-  }
-{% endstylesheet %}
-
-<div class="hero-section" style="height: {{ section.settings.section_height }}px; background-image: url('{{ section.settings.background_image | image_url: width: 1500 }}');">
-  <div class="hero-content">
+<div 
+  class="tw:bg-cover tw:bg-center" 
+  style="height: {{ section.settings.section_height }}px; background-image: url('{{ section.settings.background_image | image_url: width: 1500 }}');"
+>
+  <div class="tw:mx-auto tw:text-center tw:bg-[rgba(255,255,255,0.5)] tw:p-[20px] md:tw:p-[40px_30px] tw:h-full tw:flex tw:flex-col tw:justify-center tw:items-center">
+    
     {% if section.settings.heading %}
-      <h1 class="hero-heading">{{ section.settings.heading }}</h1>
+      <h1 class="tw:text-[2.5rem] md:tw:text-[3rem] tw:font-bold tw:mb-[30px] tw:leading-tight">
+        {{ section.settings.heading }}
+      </h1>
     {% endif %}
 
     {% if section.settings.subheading %}
-      <p class="hero-subheading">{{ section.settings.subheading }}</p>
+      <p class="tw:text-[1rem] md:tw:text-[1.25rem] tw:mb-[60px]">
+        {{ section.settings.subheading }}
+      </p>
     {% endif %}
 
     {% if section.settings.button_text and section.settings.button_link %}
-      <a href="{{ section.settings.button_link }}" class="button hero-button">
-        {{ section.settings.button_text }}
-      </a>
+      {% render 'btn-primary', 
+        text: section.settings.button_text, 
+        type: 'button',
+      %}
     {% endif %}
   </div>
 </div>

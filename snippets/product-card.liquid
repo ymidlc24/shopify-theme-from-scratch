@@ -1,0 +1,18 @@
+{% comment %}
+  Usage: {% render 'product-card', product: product %}
+{% endcomment %}
+
+<div class="tw:text-left tw:bg-[#fff] tw:rounded-[8px] tw:p-[20px] tw:shadow-[0_2px_8px_rgba(0,0,0,0.1)] tw:transition-all tw:duration-[0.3s] tw:hover:translate-y-[-5px] tw:hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]">
+  <a href="{{ product.url }}" class="tw:no-underline tw:text-inherit">
+    <img 
+      src="{{ product.featured_image | image_url: width: 400 }}" 
+      alt="{{ product.title }}"
+      class="tw:w-full tw:h-auto tw:rounded-sm"
+      loading="lazy"
+      width="400px"
+      height="400px"
+    >
+    <h2 class="tw:text-[1.2rem] tw:my-2.5 tw:font-bold">{{ product.title }}</h2>
+    <p class="tw:text-[1rem] tw:text-[#666]">{{ product.price | money }}</p>
+  </a>
+</div>

@@ -1,0 +1,5 @@
+@import "tailwindcss" prefix(tw);
+
+/* Go up one level from assets/ then scan everything */
+@source "../*";
+@source "../**/*.liquid";

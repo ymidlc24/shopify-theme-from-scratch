@@ -1,13 +1,15 @@
 {% layout 'theme' %}
 
-<div class="container">
-  <main class="page-template page" style="min-height: 60vh;">
-    <div class="page-wrapper">
-      <header class="page-header">
-        <h1 class="page-title">{{ page.title }}</h1>
+<div class="container tw:mx-auto">
+  <main class="tw:min-h-[60vh] tw:py-[40px]">
+    <div class="tw:max-w-full">
+      <header class="tw:mb-8">
+        <h1 class="tw:text-[2.5rem] tw:font-bold tw:leading-tight">
+          {{ page.title }}
+        </h1>
       </header>
 
-      <div class="page-content rte">
+      <div class="tw:text-[1rem] tw:leading-relaxed tw:text-[#333]">
         {{ page.content }}
       </div>
     </div>
