@@ -1,0 +1,46 @@
+<div class="container tw:mx-auto tw:flex tw:gap-[40px] tw:mt-[40px] tw:min-h-[65vh]">
+  <div class="tw:grow">
+    <div class="tw:mb-6">
+      <h1 class="tw:text-2xl tw:font-bold">{{ section.settings.title }}</h1>
+    </div>
+
+    <div class="tw:grid tw:grid-cols-3 tw:gap-[20px]">
+      {% for collection in collections %}
+        {% unless collection.handle == 'frontpage' %}
+          <div class="tw:text-left tw:bg-[#fff] tw:rounded-[8px] tw:p-[20px] tw:shadow-[0_2px_8px_rgba(0,0,0,0.1)] tw:transition-all tw:duration-[0.3s] tw:hover:translate-y-[-5px] tw:hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]">
+            <a href="{{ collection.url }}" class="tw:block tw:aspect-square tw:overflow-hidden tw:bg-gray-100 tw:rounded-sm">
+              {% if collection.featured_image %}
+                {{ collection.featured_image | image_url: width: 600 | image_tag: 
+                  loading: 'lazy', 
+                  class: 'tw:w-full tw:h-full tw:object-cover tw:transition-transform tw:duration-500 group-hover:tw:scale-105' 
+                }}
+              {% else %}
+                {{ 'collection-1' | placeholder_svg_tag: 'tw:w-full tw:h-full tw:bg-gray-200' }}
+              {% endif %}
+            </a>
+            <div class="tw:mt-4">
+              <h2 class="tw:text-lg tw:font-medium">
+                <a href="{{ collection.url }}" class="tw:hover:underline">{{ collection.title }}</a>
+              </h2>
+              <p class="tw:text-gray-500 tw:text-sm">{{ collection.all_products_count }} Items</p>
+            </div>
+          </div>
+        {% endunless %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection List",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "All Collections"
+    }
+  ]
+}
+{% endschema %}
