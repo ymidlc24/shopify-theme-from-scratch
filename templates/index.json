@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
@@ -15,7 +24,7 @@
         "button_color": "#ffffff",
         "button_text_color": "#667eea",
         "text_alignment": "center",
-        "section_height": 600
+        "section_height": 500
       }
     },
     "featured_collection_K3hh7f": {
