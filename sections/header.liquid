@@ -3,18 +3,12 @@
     
     <div class="tw:shrink-0">
       <a href="/" class="tw:inline-block tw:no-underline">
-      {% if shop.brand.logo %}
-        <img 
-          src="{{ shop.brand.logo | image_url: width: 400 }}" 
-          alt="{{ shop.brand.name | escape }}" 
-          class="tw:max-h-[60px] md:tw:max-h-[80px] tw:w-auto tw:block"
-          width="400"
-          height="auto"
-        >
-      {% else %}
-        <span class="tw:text-[24px] md:tw:text-[32px] tw:font-bold tw:text-white">{{ shop.brand.name }}</span>
-      {% endif %}
-    </a>
+        {% if shop.brand.logo %}
+          <img src="{{ shop.brand.logo | image_url: width: 400 }}" alt="{{ shop.brand.name | escape }}" class="tw:max-h-[60px] md:tw:max-h-[80px] tw:w-auto tw:block" width="400" height="auto">
+        {% else %}
+          <span class="tw:text-[24px] md:tw:text-[32px] tw:font-bold tw:text-white">{{ shop.brand.name }}</span>
+        {% endif %}
+      </a>
     </div>
       
     <nav class="tw:flex-1 tw:flex tw:justify-center">
@@ -33,38 +27,24 @@
       <div class="tw:relative">
         <form action="/search" method="get" class="tw:flex tw:items-stretch tw:m-0">
           <input type="hidden" name="type" value="product">
-          <input 
-            type="search" 
-            name="q" 
-            placeholder="Search products..." 
-            class="tw:p-[8px_12px] tw:border tw:border-[#ddd] tw:rounded-l-[4px] tw:w-[150px] md:tw:w-[200px] tw:text-[14px] tw:outline-none tw:focus:border-[#007cba] tw:bg-white"
-            value="{{ search.terms | escape }}"
-          >
-          <button 
-            type="submit" 
-            class="tw:bg-[#b35b3a] tw:text-white tw:p-[8px_12px] tw:border tw:border-[#aa4d2a] tw:border-l-0 tw:rounded-r-[4px] tw:flex tw:items-center tw:justify-center tw:transition-all tw:hover:bg-[#db8160]"
-          >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://w3.org">
-              <path d="M17.5 17.5L12.5001 12.5M14.1667 8.33333C14.1667 11.555 11.555 14.1667 8.33333 14.1667C5.11167 14.1667 2.5 11.555 2.5 8.33333C2.5 5.11167 5.11167 2.5 8.33333 2.5C11.555 2.5 14.1667 5.11167 14.1667 8.33333Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
+          <input type="search" name="q" placeholder="Search products..." class="tw:p-[8px_12px] tw:border tw:border-[#ddd] tw:rounded-l-[4px] tw:w-[150px] md:tw:w-[200px] tw:text-[14px] tw:outline-none tw:focus:border-[#007cba] tw:bg-white" value="{{ search.terms | escape }}">
+          <button type="submit" class="tw:bg-[#b35b3a] tw:text-white tw:p-[8px_12px] tw:border tw:border-[#aa4d2a] tw:border-l-0 tw:rounded-r-[4px] tw:flex tw:items-center tw:justify-center tw:transition-all tw:hover:bg-[#db8160]">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://w3.org"><path d="M17.5 17.5L12.5001 12.5M14.1667 8.33333C14.1667 11.555 11.555 14.1667 8.33333 14.1667C5.11167 14.1667 2.5 11.555 2.5 8.33333C2.5 5.11167 5.11167 2.5 8.33333 2.5C11.555 2.5 14.1667 5.11167 14.1667 8.33333Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </button>
         </form>
       </div>
 
       <div class="tw:flex tw:items-center tw:gap-4">
-        <a href="/account" class="tw:flex tw:items-center tw:no-underline tw:text-white tw:transition-colors tw:duration-300 tw:hover:text-[#db8160]">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <a href="/account" class="tw:flex tw:items-center tw:no-underline tw:text-white tw:hover:text-[#db8160]">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org"><path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
 
-        <a id="header-cart-icon" href="/cart" class="tw:relative tw:flex tw:items-center tw:no-underline tw:text-white tw:transition-colors tw:duration-300 tw:hover:text-[#db8160]">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <a href="/cart" class="tw:relative tw:flex tw:items-center tw:no-underline tw:text-white tw:hover:text-[#db8160]">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://w3.org">
             <path d="M9 22C9.55228 22 10 21.5523 10 21C10 20.4477 9.55228 20 9 20C8.44772 20 8 20.4477 8 21C8 21.5523 8.44772 22 9 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 22C20.5523 22 21 21.5523 21 21C21 20.4477 20.5523 20 20 20C19.4477 20 19 20.4477 19 21C19 21.5523 19.4477 22 20 22Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M1 1H5L7.68 14.39C7.77144 14.8504 8.02191 15.264 8.38755 15.5583C8.75318 15.8526 9.2107 16.009 9.68 16H19.4C19.8693 16.009 20.3268 15.8526 20.6925 15.5583C21.0581 15.264 21.3086 14.8504 21.4 14.39L23 6H6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          {% assign visible_count = 0 %}
-          {% for item in cart.items %}{% unless item.properties._hidden %}{% assign visible_count = visible_count | plus: item.quantity %}{% endunless %}{% endfor %}
-          
-          <span class="tw:absolute tw:top-[-8px] tw:right-[-8px] tw:bg-[#db8160] tw:text-white tw:rounded-full tw:w-[20px] tw:h-[20px] tw:flex tw:items-center tw:justify-center tw:text-[12px] tw:font-bold">
-            {{ visible_count }}
+          <span class="cart-count tw:absolute tw:top-[-8px] tw:right-[-8px] tw:bg-[#db8160] tw:text-white tw:rounded-full tw:w-[20px] tw:h-[20px] tw:flex tw:items-center tw:justify-center tw:text-[12px] tw:font-bold">
+            {{ cart.item_count }}
           </span>
         </a>
       </div>

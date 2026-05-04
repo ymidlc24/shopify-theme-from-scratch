@@ -1,13 +1,29 @@
-<div class="container tw:mx-auto">
+<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+<style>
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+</style>
+
+<div
+  class="container tw:mx-auto"
+  id="ProductSection-{{ section.id }}"
+  data-section="{{ section.id }}">
   <div class="tw:flex tw:gap-[40px] tw:my-[40px] tw:items-start tw:min-h-[55vh]">
     <div class="tw:shrink-0">
-      <img 
-        src="{{ product.featured_image | image_url: width: 400 }}" 
-        alt="{{ product.title }}"
+      <img
+        id="product-image-{{ section.id }}"
+        src="{{ product.selected_or_first_available_variant.featured_image | default: product.featured_image | image_url: width: 400 }}"
+        alt="{{ product.title | escape }}"
         class="tw:w-[400px] tw:h-[400px] tw:object-cover tw:rounded-[8px] tw:bg-[#f5f5f5]"
-        width="400px"
-        height="400px"
-      >
+        width="400"
+        height="400">
     </div>
 
     <div class="tw:flex-1 tw:flex tw:flex-col">
@@ -15,37 +31,58 @@
         {% case block.type %}
           {% when 'title' %}
             <h1 class="tw:text-[2rem] tw:font-bold tw:mb-[16px]">{{ product.title }}</h1>
-          
           {% when 'description' %}
-            <div class="tw:text-[#555] tw:text-[1rem]">
-              {{ product.description }}
-            </div>
-
+            <div class="tw:text-[#555] tw:text-[1rem] tw:mb-[20px]">{{ product.description }}</div>
           {% when 'metafield' %}
             {% if product.metafields.custom.ingredients %}
-              <div class="tw:mt-0">
+              <div class="tw:mt-0 tw:mb-[20px]">
                 <h3 class="tw:font-bold">{{ 'product.ingredients' | t }}</h3>
                 <p class="tw:text-[#555] tw:text-[1rem]">{{ product.metafields.custom.ingredients }}</p>
               </div>
             {% endif %}
-
           {% when 'price' %}
-            <p class="tw:text-[1.5rem] tw:text-[#2d2d2d] tw:mb-[24px]">{{ product.price | money }}</p>
+            <p id="product-price-{{ section.id }}" class="tw:text-[1.5rem] tw:text-[#2d2d2d] tw:mb-[24px]">{{ product.selected_or_first_available_variant.price | money }}</p>
+
+          {% when 'inventory_status' %}
+            <div id="inventory-status-{{ section.id }}" class="tw:mb-[20px] tw:hidden">
+              <div class="tw:flex tw:justify-between tw:items-end tw:mb-2">
+                <span id="stock-label-{{ section.id }}" class="tw:text-[12px] tw:font-bold tw:uppercase tw:tracking-widest"></span>
+                <span id="stock-count-{{ section.id }}" class="tw:text-[11px] tw:text-gray-400"></span>
+              </div>
+              <div class="tw:w-full tw:h-[6px] tw:bg-gray-100 tw:rounded-full tw:overflow-hidden">
+                <div
+                  id="stock-bar-{{ section.id }}"
+                  class="tw:h-full tw:transition-all tw:duration-500 tw:ease-out tw:bg-[#b35b3a]"
+                  style="width: 0%"></div>
+              </div>
+            </div>
 
           {% when 'add_to_cart' %}
-            {% form 'product', product %}
-              <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-              
+            {% assign initial_variant = product.selected_or_first_available_variant %}
+            {% assign initial_cart_qty = 0 %}
+            {% for item in cart.items %}
+              {% if item.variant_id == initial_variant.id %}
+                {% assign initial_cart_qty = item.quantity %}{% endif %}
+            {% endfor %}
+
+            {% comment %} 
+                             CRITICAL CHANGE: Changed action to /cart/update to ensure absolute quantity setting 
+                        {% endcomment %}
+            <form
+              action="/cart/update"
+              method="post"
+              id="product-form">
               {% unless product.has_only_default_variant %}
                 <div class="tw:mb-[20px]">
                   {% for option in product.options_with_values %}
                     <div class="tw:mb-[10px]">
-                      <label class="tw:block tw:font-bold">{{ option.name }}</label>
-                      <select class="variant-select tw:p-[8px] tw:w-full tw:rounded-[4px] tw:border tw:border-[#ccc]" data-index="option{{ forloop.index }}">
+                      <label class="tw:block tw:font-bold tw:mb-[4px]">{{ option.name }}</label>
+                      <select class="variant-select tw:p-[8px] tw:w-full tw:rounded-[4px] tw:border tw:border-[#ccc] tw:bg-white" data-index="option{{ forloop.index }}">
                         {% for value in option.values %}
-                          <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>
-                            {{ value }}
-                          </option>
+                          <option
+                            value="{{ value | escape }}"
+                            {% if option.selected_value == value %}
+                            selected{% endif %}>{{ value }}</option>
                         {% endfor %}
                       </select>
                     </div>
@@ -53,12 +90,45 @@
                 </div>
               {% endunless %}
 
-              {% render 'btn-primary', 
-                 text: 'Add to Cart', 
-                 type: 'submit', 
-                 class: 'tw:mt-[16px]' 
-              %}
-            {% endform %}
+              <div class="tw:mb-[20px]">
+                <label class="tw:block tw:font-bold tw:mb-[4px]">Quantity</label>
+                <div class="tw:flex tw:items-center tw:border tw:border-[#ccc] tw:w-max tw:rounded-[4px] tw:overflow-hidden">
+                  <button
+                    type="button"
+                    class="tw:px-4 tw:py-2 tw:bg-gray-50 tw:hover:bg-gray-100"
+                    onclick="let i=this.nextElementSibling; i.stepDown(); i.dispatchEvent(new Event('input', {bubbles:true}));">-</button>
+                  <input
+                    type="number"
+                    name="updates[{{ initial_variant.id }}]"
+                    id="quantity-input-{{ section.id }}"
+                    value="{% if initial_cart_qty > 0 %}{{ initial_cart_qty }}{% else %}1{% endif %}"
+                    min="0"
+                    max="{% if initial_variant.inventory_management == null or initial_variant.inventory_policy == 'continue' %}999{% else %}{{ initial_variant.inventory_quantity }}{% endif %}"
+                    class="tw:w-[60px] tw:text-center tw:border-none tw:outline-none tw:py-2">
+                  <button
+                    type="button"
+                    class="tw:px-4 tw:py-2 tw:bg-gray-50 tw:hover:bg-gray-100"
+                    onclick="let i=this.previousElementSibling; i.stepUp(); i.dispatchEvent(new Event('input', {bubbles:true}));">+</button>
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                {% unless initial_variant.available %}
+                disabled{% endunless %}
+                class="tw:bg-[#b35b3a] tw:text-white tw:w-full tw:py-4 tw:rounded-full tw:font-bold tw:uppercase tw:tracking-widest tw:transition-all hover:tw:bg-[#964a2f] disabled:tw:opacity-50 disabled:tw:cursor-not-allowed">
+                {% if initial_variant.available %}
+                  {% if initial_cart_qty > 0 %}Update Cart{% else %}Add to Cart{% endif %}
+                  {% else %}Out of Stock{% endif %}
+              </button>
+            </form>
+
+            <script type="application/json" id="VariantJson-{{ section.id }}">
+              [{% for variant in product.variants %}{"id": {{ variant.id }}, "options": {{ variant.options | json }}, "price": {{ variant.price }}, "available": {{ variant.available }}, "inventory_management": {{ variant.inventory_management | json }}, "inventory_policy": {{ variant.inventory_policy | json }}, "inventory_quantity": {{ variant.inventory_quantity | default: 0 }}, "featured_image": {% if variant.featured_image %}{"src": {{ variant.featured_image.src | json }}}{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}{% endfor %}]
+            </script>
+            <script type="application/json" id="CartInventoryJson-{{ section.id }}">
+              { "items": [{% for item in cart.items %}{ "variant_id": {{ item.variant_id }}, "quantity": {{ item.quantity }} }{% unless forloop.last %},{% endunless %}{% endfor %}] }
+            </script>
         {% endcase %}
       {% endfor %}
     </div>
@@ -71,20 +141,24 @@
     "tag": "section",
     "blocks": [
       {
-        "type": "@app"
-      },
-      {
         "type": "title",
         "name": "Title"
-      }, {
+      },
+      {
         "type": "description",
         "name": "Description"
-      }, {
+      },
+      {
         "type": "metafield",
         "name": "Metafield"
-      },  {
+      },
+      {
         "type": "price",
         "name": "Price"
+      },
+      {
+        "type": "inventory_status",
+        "name": "Inventory Checker"
       }, {
         "type": "add_to_cart",
         "name": "Add to Cart Button"
