@@ -301,6 +301,12 @@
   .tw\:mt-4 {
     margin-top: calc(var(--tw-spacing) * 4);
   }
+  .tw\:mt-6 {
+    margin-top: calc(var(--tw-spacing) * 6);
+  }
+  .tw\:mt-8 {
+    margin-top: calc(var(--tw-spacing) * 8);
+  }
   .tw\:mt-10 {
     margin-top: calc(var(--tw-spacing) * 10);
   }
@@ -312,6 +318,9 @@
   }
   .tw\:mt-\[16px\] {
     margin-top: 16px;
+  }
+  .tw\:mt-\[20px\] {
+    margin-top: 20px;
   }
   .tw\:mt-\[40px\] {
     margin-top: 40px;
@@ -412,6 +421,9 @@
   .tw\:h-\[60px\] {
     height: 60px;
   }
+  .tw\:h-\[80px\] {
+    height: 80px;
+  }
   .tw\:h-\[300px\] {
     height: 300px;
   }
@@ -447,6 +459,9 @@
   }
   .tw\:w-\[60px\] {
     width: 60px;
+  }
+  .tw\:w-\[80px\] {
+    width: 80px;
   }
   .tw\:w-\[150px\] {
     width: 150px;
@@ -856,6 +871,9 @@
   }
   .tw\:px-6 {
     padding-inline: calc(var(--tw-spacing) * 6);
+  }
+  .tw\:px-10 {
+    padding-inline: calc(var(--tw-spacing) * 10);
   }
   .tw\:px-\[15px\] {
     padding-inline: 15px;

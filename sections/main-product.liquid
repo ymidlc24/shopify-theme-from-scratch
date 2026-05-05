@@ -72,6 +72,7 @@
             <form action="/cart/add" method="post" id="product-form">
               {% assign espresso = all_products['espresso-shot'] %}
               {% assign oatmilk = all_products['oat-milk'] %}
+              
               <script type="application/json" id="AddonMap-{{ section.id }}">
                 {
                   "Espresso Shot": {{ espresso.selected_or_first_available_variant.id | default: 0 | json }},
@@ -83,7 +84,7 @@
                 <div class="tw:mb-[20px]">
                   {% for option in product.options_with_values %}
                     <div class="tw:mb-[10px]">
-                      <label class="tw:block tw:font-bold tw:mb-[4px]">{{ option.name }}</label>
+                      <h3 class="tw:font-bold">{{ option.name }}</h3>
                       <select class="variant-select tw:p-[8px] tw:w-full tw:rounded-[4px] tw:border tw:border-[#ccc] tw:bg-white" data-index="option{{ forloop.index }}">
                         {% for value in option.values %}
                           <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
@@ -94,32 +95,35 @@
                 </div>
               {% endunless %}
 
-              <div class="tw:mb-[25px] tw:p-4 tw:border tw:border-gray-200 tw:rounded-lg">
-                <p class="tw:font-bold tw:text-[14px] tw:uppercase tw:tracking-wider tw:mb-3">Customize Your Drink</p>
-                <div class="tw:grid tw:grid-cols-1 tw:gap-2">
-                  {% if espresso %}
-                    <label class="tw:cursor-pointer">
-                      <input type="checkbox" class="tw:hidden addon-checkbox" data-addon-name="Espresso Shot" data-addon-price="{{ espresso.price }}">
-                      <div class="addon-label tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
-                        <span class="tw:text-[14px]">Extra Espresso Shot</span>
-                        <span class="tw:text-[13px] tw:font-bold">+ {{ espresso.price | money }}</span>
-                      </div>
-                    </label>
-                  {% endif %}
-                  {% if oatmilk %}
-                    <label class="tw:cursor-pointer">
-                      <input type="checkbox" class="tw:hidden addon-checkbox" data-addon-name="Oat Milk" data-addon-price="{{ oatmilk.price }}">
-                      <div class="addon-label tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
-                        <span class="tw:text-[14px]">Substitute Oat Milk</span>
-                        <span class="tw:text-[13px] tw:font-bold">+ {{ oatmilk.price | money }}</span>
-                      </div>
-                    </label>
-                  {% endif %}
-                </div>
+              <h3 class="tw:font-bold">Customize Your Drink</h3>
+              <div class="tw:grid tw:grid-cols-1 tw:gap-2">
+                {% if espresso %}
+                  <label class="tw:cursor-pointer">
+                    <input type="checkbox" class="tw:hidden addon-checkbox" 
+                          data-addon-name="Espresso Shot" 
+                          data-addon-price="{{ espresso.price }}"> 
+                    <div class="addon-label tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
+                      <span class="tw:text-[14px]">Extra Espresso Shot</span>
+                      <span class="tw:text-[13px] tw:font-bold">+ {{ espresso.price | money }}</span>
+                    </div>
+                  </label>
+                {% endif %}
+
+                {% if oatmilk %}
+                  <label class="tw:cursor-pointer">
+                    <input type="checkbox" class="tw:hidden addon-checkbox" 
+                          data-addon-name="Oat Milk" 
+                          data-addon-price="{{ oatmilk.price }}">
+                    <div class="addon-label tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
+                      <span class="tw:text-[14px]">Substitute Oat Milk</span>
+                      <span class="tw:text-[13px] tw:font-bold">+ {{ oatmilk.price | money }}</span>
+                    </div>
+                  </label>
+                {% endif %}
               </div>
 
-              <div class="tw:mb-[20px]">
-                <label class="tw:block tw:font-bold tw:mb-[4px]">Quantity</label>
+              <div class="tw:mb-[20px] tw:mt-[20px]">
+                <h3 class="tw:font-bold">Quantity</h3>
                 <div class="tw:flex tw:items-center tw:border tw:border-[#ccc] tw:w-max tw:rounded-[4px] tw:overflow-hidden">
                   <button type="button" class="tw:px-4 tw:py-2 tw:bg-gray-50" onclick="let i=this.nextElementSibling; i.stepDown(); i.dispatchEvent(new Event('input', {bubbles:true}));">-</button>
                   <input type="number" name="quantity" value="{% if initial_cart_qty > 0 %}{{ initial_cart_qty }}{% else %}1{% endif %}" min="1" class="tw:w-[60px] tw:text-center tw:border-none tw:outline-none tw:py-2">
@@ -127,16 +131,28 @@
                 </div>
               </div>
 
-              <button type="submit" data-variant-id="{{ initial_variant.id }}" {% unless initial_variant.available %}disabled{% endunless %} class="tw:bg-[#b35b3a] tw:text-white tw:w-full tw:py-4 tw:rounded-full tw:font-bold tw:uppercase">
-                {% if initial_variant.available %}Add to Cart{% else %}Out of Stock{% endif %}
+              {% assign base_styles = "tw:inline-block tw:px-[36px] tw:py-[14px] tw:text-white tw:font-bold tw:uppercase tw:tracking-[0.15em] tw:leading-none tw:cursor-pointer tw:text-center tw:no-underline tw:transition-all tw:duration-300 tw:hover:translate-y-[-1px] tw:focus:outline-none tw:bg-[#b35b3a] tw:border-[3px] tw:border-[#aa4d2a] tw:rounded-[50px] tw:hover:border-[#db8160]" %}
+              <button 
+                type="submit" 
+                data-variant-id="{{ initial_variant.id }}" 
+                {% unless initial_variant.available %}disabled{% endunless %} 
+                class="{{ base_styles }}"
+              >
+                  
+                {% if initial_variant.available %}
+                  Add to Cart
+                {% else %}
+                  Out of Stock
+                {% endif %}
               </button>
             </form>
 
             <script type="application/json" id="VariantJson-{{ section.id }}">
               [{% for variant in product.variants %}{"id": {{ variant.id }}, "options": {{ variant.options | json }}, "price": {{ variant.price }}, "available": {{ variant.available }}, "inventory_management": {{ variant.inventory_management | json }}, "inventory_policy": {{ variant.inventory_policy | json }}, "inventory_quantity": {{ variant.inventory_quantity | default: 0 }}, "featured_image": {% if variant.featured_image %}{"src": {{ variant.featured_image.src | json }}}{% else %}null{% endif %}}{% unless forloop.last %},{% endunless %}{% endfor %}]
             </script>
+
             <script type="application/json" id="CartInventoryJson-{{ section.id }}">
-              { "items": [{% for item in cart.items %}{ "variant_id": {{ item.variant_id }}, "quantity": {{ item.quantity }} }{% unless forloop.last %},{% endunless %}{% endfor %}] }
+              {"items": [{% for item in cart.items %}{"variant_id": {{ item.variant_id }}, "quantity": {{ item.quantity }}}{% unless forloop.last %},{% endunless %}{% endfor %}]}
             </script>
         {% endcase %}
       {% endfor %}
@@ -145,5 +161,33 @@
 </div>
 
 {% schema %}
-{ "name": "Main Product", "blocks": [ { "type": "title", "name": "Title" }, { "type": "description", "name": "Description" }, { "type": "metafield", "name": "Metafield" }, { "type": "price", "name": "Price" }, { "type": "inventory_status", "name": "Inventory Checker" }, { "type": "add_to_cart", "name": "Add to Cart Button" } ] }
+  {
+    "name": "Main Product",
+    "blocks": [
+      {
+        "type": "title",
+        "name": "Title"
+      },
+      {
+        "type": "description",
+        "name": "Description"
+      },
+      {
+        "type": "metafield",
+        "name": "Metafield"
+      },
+      {
+        "type": "price",
+        "name": "Price"
+      },
+      {
+        "type": "inventory_status",
+        "name": "Inventory Checker"
+      },
+      {
+        "type": "add_to_cart",
+        "name": "Add to Cart Button"
+      }
+    ]
+  }
 {% endschema %}

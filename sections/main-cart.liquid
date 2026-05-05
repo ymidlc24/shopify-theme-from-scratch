@@ -1,6 +1,6 @@
 {% assign visible_count = 0 %}
 {% for item in cart.items %}
-  {% unless item.properties._hidden %}
+  {% unless item.properties._hidden == "true" %}
     {% assign visible_count = visible_count | plus: item.quantity %}
   {% endunless %}
 {% endfor %}
@@ -48,14 +48,26 @@
           </thead>
           <tbody>
             {% for item in cart.items %}
-              {% if item.properties._hidden %}{% continue %}{% endif %}
+              {% if item.properties._hidden == "true" %}{% continue %}{% endif %}
               
+              {% assign bundle_unit_price = item.final_price %}
+              {% assign bundle_line_price = item.final_line_price %}
+              {% assign current_bundle_id = item.properties._bundleId | append: "" %}
+
+              {% for addon in cart.items %}
+                {% assign addon_parent = addon.properties._parentBundle | append: "" %}
+                {% if addon.properties._hidden == "true" and addon_parent == current_bundle_id and current_bundle_id != "" %}
+                  {% assign bundle_unit_price = bundle_unit_price | plus: addon.final_price %}
+                  {% assign bundle_line_price = bundle_line_price | plus: addon.final_line_price %}
+                {% endif %}
+              {% endfor %}
+
               {% assign max_qty = item.variant.inventory_quantity %}
               {% if item.variant.inventory_policy == 'continue' or item.variant.inventory_management == null %}
                 {% assign max_qty = 999 %}
               {% endif %}
 
-              <tr class="tw:border-b tw:border-[#f0f0f0]" data-line="{{ forloop.index }}">
+              <tr class="tw:border-b tw:border-[#f0f0f0]" data-key="{{ item.key }}">
                 <td class="tw:p-[15px] md:tw:p-[20px_15px]">
                   <div class="tw:flex tw:gap-[15px] tw:items-start">
                     {% if item.image %}
@@ -76,7 +88,7 @@
                     </div>
                   </div>
                 </td>
-                <td class="tw:p-[15px]">{{ item.original_price | money }}</td>
+                <td class="tw:p-[15px]">{{ bundle_unit_price | money }}</td>
                 <td class="tw:p-[15px]">
                   <div class="quantity-stepper tw:flex tw:items-center tw:border tw:border-[#ccc] tw:w-max tw:rounded-[4px] tw:overflow-hidden tw:bg-white">
                     <button type="button" class="minus tw:px-3 tw:py-1 tw:bg-gray-50 hover:tw:bg-gray-100">-</button>
@@ -91,7 +103,7 @@
                     <button type="button" class="plus tw:px-3 tw:py-1 tw:bg-gray-50 hover:tw:bg-gray-100">+</button>
                   </div>
                 </td>
-                <td class="tw:p-[15px]">{{ item.final_line_price | money }}</td>
+                <td class="tw:p-[15px]">{{ bundle_line_price | money }}</td>
                 <td class="tw:p-[15px]">
                   <a href="{{ item.url_to_remove }}" class="tw:text-[#d9534f] tw:text-[14px] tw:underline hover:tw:text-[#c9302c]">Remove</a>
                 </td>
@@ -117,7 +129,8 @@
           <a href="/collections/all" class="tw:inline-block tw:px-[30px] tw:py-[12px] tw:bg-white tw:text-[#333] tw:border-2 tw:border-[#ddd] tw:rounded-[50px] tw:text-[13px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-center tw:no-underline hover:tw:bg-gray-50">
             {{ 'cart.continue_shopping' | t }}
           </a>
-          <button type="submit" name="checkout" class="tw:bg-[#b35b3a] tw:text-white tw:px-[50px] tw:py-[12px] tw:rounded-[50px] tw:text-[13px] tw:font-bold tw:uppercase tw:tracking-widest hover:tw:bg-[#964a2f] tw:transition-colors">
+          {% assign base_styles = "tw:inline-block tw:px-[36px] tw:py-[14px] tw:text-white tw:font-bold tw:uppercase tw:tracking-[0.15em] tw:leading-none tw:cursor-pointer tw:text-center tw:no-underline tw:transition-all tw:duration-300 tw:hover:translate-y-[-1px] tw:focus:outline-none tw:bg-[#b35b3a] tw:border-[3px] tw:border-[#aa4d2a] tw:rounded-[50px] tw:hover:border-[#db8160]" %}
+          <button type="submit" name="checkout" class="{{ base_styles }}">
             Checkout
           </button>
         </div>

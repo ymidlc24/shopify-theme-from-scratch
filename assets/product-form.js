@@ -4,10 +4,11 @@ function formatMoney(cents) {
 
 function updateProductUI(section) {
   const sectionId = section.dataset.section;
-  const variantData = JSON.parse(document.getElementById(`VariantJson-${sectionId}`).textContent);
-  const cartJson = JSON.parse(document.getElementById(`CartInventoryJson-${sectionId}`).textContent);
-  
-  const quantityInput = section.querySelector('input[type="number"]');
+  const variantJsonElement = document.getElementById(`VariantJson-${sectionId}`);
+  if (!variantJsonElement) return;
+
+  const variantData = JSON.parse(variantJsonElement.textContent);
+  const quantityInput = section.querySelector('input[name="quantity"]');
   const currentOptions = Array.from(section.querySelectorAll('.variant-select')).map(s => s.value);
   const matchedVariant = variantData.find(v => currentOptions.every((opt, i) => v.options[i] === opt));
   const buyButton = section.querySelector('[type="submit"]');
@@ -16,40 +17,13 @@ function updateProductUI(section) {
   const addonTotalCents = activeAddons.reduce((sum, el) => sum + parseInt(el.dataset.addonPrice || 0), 0);
 
   if (matchedVariant) {
-    const cartItem = cartJson.items.find(item => item.variant_id === matchedVariant.id);
-    const cartQty = cartItem ? cartItem.quantity : 0;
-    const isTracked = matchedVariant.inventory_management && matchedVariant.inventory_policy !== 'continue';
-    const maxStock = isTracked ? matchedVariant.inventory_quantity : 999;
-
     buyButton.dataset.variantId = matchedVariant.id;
-
-    if (window.event && window.event.target.classList.contains('variant-select')) {
-      quantityInput.value = cartQty > 0 ? cartQty : 1;
-    }
-
-    if (parseInt(quantityInput.value) > maxStock) quantityInput.value = maxStock;
-    quantityInput.setAttribute('max', maxStock);
-
     const priceElement = document.getElementById(`product-price-${sectionId}`);
     if (priceElement) {
       priceElement.textContent = formatMoney(matchedVariant.price + addonTotalCents);
     }
-
-    const stockBar = document.getElementById(`stock-bar-${sectionId}`);
-    const stockStatus = document.getElementById(`inventory-status-${sectionId}`);
-    if (stockBar && isTracked) {
-      stockStatus.classList.remove('tw:hidden');
-      const percent = Math.min((matchedVariant.inventory_quantity / 20) * 100, 100);
-      stockBar.style.width = percent + '%';
-      document.getElementById(`stock-count-${sectionId}`).textContent = `${matchedVariant.inventory_quantity} in stock`;
-      document.getElementById(`stock-label-${sectionId}`).textContent = matchedVariant.inventory_quantity > 5 ? 'In Stock' : 'Low Stock';
-    } else if (stockStatus) {
-      stockStatus.classList.add('tw:hidden');
-    }
-
-    const currentVal = parseInt(quantityInput.value) || 0;
     buyButton.disabled = !matchedVariant.available;
-    buyButton.textContent = matchedVariant.available ? (cartQty > 0 ? (currentVal === 0 ? 'Remove' : 'Update Cart') : 'Add to Cart') : 'Out of Stock';
+    buyButton.textContent = matchedVariant.available ? 'Add to Cart' : 'Out of Stock';
   }
 }
 
@@ -59,21 +33,31 @@ document.addEventListener('submit', async (e) => {
 
   const section = e.target.closest('[data-section]');
   const sectionId = section.dataset.section;
-  const addonMap = JSON.parse(document.getElementById(`AddonMap-${sectionId}`).textContent);
+  const addonMapElement = document.getElementById(`AddonMap-${sectionId}`);
+  if (!addonMapElement) return;
 
+  const addonMap = JSON.parse(addonMapElement.textContent);
   const btn = e.target.querySelector('[type="submit"]');
-  const originalText = btn.textContent;
+  const originalText = "Add to Cart";
+  
   btn.disabled = true;
   btn.textContent = 'Processing...';
 
   const mainId = btn.dataset.variantId;
-  const qty = parseInt(e.target.querySelector('input[type="number"]').value);
+  const qtyInput = e.target.querySelector('input[name="quantity"]');
+  const qty = qtyInput ? parseInt(qtyInput.value) : 1;
   const activeCheckboxes = Array.from(e.target.querySelectorAll('.addon-checkbox:checked'));
+
+  const addonFingerprint = activeCheckboxes.map(cb => cb.dataset.addonName).sort().join('|') || 'none';
+  const bundleId = `b_${mainId}_${addonFingerprint}`;
 
   let items = [{
     id: parseInt(mainId),
     quantity: qty,
-    properties: { 'Add-ons': activeCheckboxes.map(cb => cb.dataset.addonName).join(', ') || 'None' }
+    properties: { 
+      'Add-ons': activeCheckboxes.map(cb => cb.dataset.addonName).join(', ') || 'None',
+      '_bundleId': bundleId 
+    }
   }];
 
   activeCheckboxes.forEach(cb => {
@@ -82,7 +66,7 @@ document.addEventListener('submit', async (e) => {
       items.push({ 
         id: parseInt(addonMap[name]), 
         quantity: qty, 
-        properties: { '_hidden': true, 'Parent': mainId } 
+        properties: { '_hidden': 'true', '_parentBundle': bundleId } 
       });
     }
   });
@@ -97,19 +81,27 @@ document.addEventListener('submit', async (e) => {
     if (response.ok) {
       window.location.href = '/cart';
     } else {
-      throw new Error();
+      const errorData = await response.json();
+      console.error('Shopify Error:', errorData.description);
+      throw new Error(errorData.description);
     }
   } catch (err) {
+    console.error('Submission failed:', err);
     btn.disabled = false;
-    btn.textContent = 'Error';
-    setTimeout(() => { btn.textContent = originalText; }, 2000);
+    btn.textContent = 'Error - Try Again';
+    setTimeout(() => { btn.textContent = originalText; }, 3000);
   }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+  const sections = document.querySelectorAll('[data-section]');
+  sections.forEach(section => updateProductUI(section));
 });
 
 ['change', 'input'].forEach(evt => {
   document.addEventListener(evt, (e) => {
     const section = e.target.closest('[data-section]');
-    if (section && (e.target.classList.contains('variant-select') || e.target.classList.contains('addon-checkbox') || e.target.type === 'number')) {
+    if (section && (e.target.classList.contains('variant-select') || e.target.classList.contains('addon-checkbox'))) {
       updateProductUI(section);
     }
   });
