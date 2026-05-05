@@ -9,6 +9,10 @@
   input[type="number"] {
     -moz-appearance: textfield;
   }
+  .addon-checkbox:checked + .addon-label {
+    border-color: #b35b3a;
+    background-color: #fdf8f6;
+  }
 </style>
 
 <div
@@ -65,13 +69,16 @@
                 {% assign initial_cart_qty = item.quantity %}{% endif %}
             {% endfor %}
 
-            {% comment %} 
-                             CRITICAL CHANGE: Changed action to /cart/update to ensure absolute quantity setting 
-                        {% endcomment %}
-            <form
-              action="/cart/update"
-              method="post"
-              id="product-form">
+            <form action="/cart/add" method="post" id="product-form">
+              {% assign espresso = all_products['espresso-shot'] %}
+              {% assign oatmilk = all_products['oat-milk'] %}
+              <script type="application/json" id="AddonMap-{{ section.id }}">
+                {
+                  "Espresso Shot": {{ espresso.selected_or_first_available_variant.id | default: 0 | json }},
+                  "Oat Milk": {{ oatmilk.selected_or_first_available_variant.id | default: 0 | json }}
+                }
+              </script>
+
               {% unless product.has_only_default_variant %}
                 <div class="tw:mb-[20px]">
                   {% for option in product.options_with_values %}
@@ -79,10 +86,7 @@
                       <label class="tw:block tw:font-bold tw:mb-[4px]">{{ option.name }}</label>
                       <select class="variant-select tw:p-[8px] tw:w-full tw:rounded-[4px] tw:border tw:border-[#ccc] tw:bg-white" data-index="option{{ forloop.index }}">
                         {% for value in option.values %}
-                          <option
-                            value="{{ value | escape }}"
-                            {% if option.selected_value == value %}
-                            selected{% endif %}>{{ value }}</option>
+                          <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
                         {% endfor %}
                       </select>
                     </div>
@@ -90,36 +94,41 @@
                 </div>
               {% endunless %}
 
-              <div class="tw:mb-[20px]">
-                <label class="tw:block tw:font-bold tw:mb-[4px]">Quantity</label>
-                <div class="tw:flex tw:items-center tw:border tw:border-[#ccc] tw:w-max tw:rounded-[4px] tw:overflow-hidden">
-                  <button
-                    type="button"
-                    class="tw:px-4 tw:py-2 tw:bg-gray-50 tw:hover:bg-gray-100"
-                    onclick="let i=this.nextElementSibling; i.stepDown(); i.dispatchEvent(new Event('input', {bubbles:true}));">-</button>
-                  <input
-                    type="number"
-                    name="updates[{{ initial_variant.id }}]"
-                    id="quantity-input-{{ section.id }}"
-                    value="{% if initial_cart_qty > 0 %}{{ initial_cart_qty }}{% else %}1{% endif %}"
-                    min="0"
-                    max="{% if initial_variant.inventory_management == null or initial_variant.inventory_policy == 'continue' %}999{% else %}{{ initial_variant.inventory_quantity }}{% endif %}"
-                    class="tw:w-[60px] tw:text-center tw:border-none tw:outline-none tw:py-2">
-                  <button
-                    type="button"
-                    class="tw:px-4 tw:py-2 tw:bg-gray-50 tw:hover:bg-gray-100"
-                    onclick="let i=this.previousElementSibling; i.stepUp(); i.dispatchEvent(new Event('input', {bubbles:true}));">+</button>
+              <div class="tw:mb-[25px] tw:p-4 tw:border tw:border-gray-200 tw:rounded-lg">
+                <p class="tw:font-bold tw:text-[14px] tw:uppercase tw:tracking-wider tw:mb-3">Customize Your Drink</p>
+                <div class="tw:grid tw:grid-cols-1 tw:gap-2">
+                  {% if espresso %}
+                    <label class="tw:cursor-pointer">
+                      <input type="checkbox" class="tw:hidden addon-checkbox" data-addon-name="Espresso Shot" data-addon-price="{{ espresso.price }}">
+                      <div class="addon-label tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
+                        <span class="tw:text-[14px]">Extra Espresso Shot</span>
+                        <span class="tw:text-[13px] tw:font-bold">+ {{ espresso.price | money }}</span>
+                      </div>
+                    </label>
+                  {% endif %}
+                  {% if oatmilk %}
+                    <label class="tw:cursor-pointer">
+                      <input type="checkbox" class="tw:hidden addon-checkbox" data-addon-name="Oat Milk" data-addon-price="{{ oatmilk.price }}">
+                      <div class="addon-label tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
+                        <span class="tw:text-[14px]">Substitute Oat Milk</span>
+                        <span class="tw:text-[13px] tw:font-bold">+ {{ oatmilk.price | money }}</span>
+                      </div>
+                    </label>
+                  {% endif %}
                 </div>
               </div>
 
-              <button
-                type="submit"
-                {% unless initial_variant.available %}
-                disabled{% endunless %}
-                class="tw:bg-[#b35b3a] tw:text-white tw:w-full tw:py-4 tw:rounded-full tw:font-bold tw:uppercase tw:tracking-widest tw:transition-all hover:tw:bg-[#964a2f] disabled:tw:opacity-50 disabled:tw:cursor-not-allowed">
-                {% if initial_variant.available %}
-                  {% if initial_cart_qty > 0 %}Update Cart{% else %}Add to Cart{% endif %}
-                  {% else %}Out of Stock{% endif %}
+              <div class="tw:mb-[20px]">
+                <label class="tw:block tw:font-bold tw:mb-[4px]">Quantity</label>
+                <div class="tw:flex tw:items-center tw:border tw:border-[#ccc] tw:w-max tw:rounded-[4px] tw:overflow-hidden">
+                  <button type="button" class="tw:px-4 tw:py-2 tw:bg-gray-50" onclick="let i=this.nextElementSibling; i.stepDown(); i.dispatchEvent(new Event('input', {bubbles:true}));">-</button>
+                  <input type="number" name="quantity" value="{% if initial_cart_qty > 0 %}{{ initial_cart_qty }}{% else %}1{% endif %}" min="1" class="tw:w-[60px] tw:text-center tw:border-none tw:outline-none tw:py-2">
+                  <button type="button" class="tw:px-4 tw:py-2 tw:bg-gray-50" onclick="let i=this.previousElementSibling; i.stepUp(); i.dispatchEvent(new Event('input', {bubbles:true}));">+</button>
+                </div>
+              </div>
+
+              <button type="submit" data-variant-id="{{ initial_variant.id }}" {% unless initial_variant.available %}disabled{% endunless %} class="tw:bg-[#b35b3a] tw:text-white tw:w-full tw:py-4 tw:rounded-full tw:font-bold tw:uppercase">
+                {% if initial_variant.available %}Add to Cart{% else %}Out of Stock{% endif %}
               </button>
             </form>
 
@@ -136,38 +145,5 @@
 </div>
 
 {% schema %}
-  {
-    "name": "Main Product",
-    "tag": "section",
-    "blocks": [
-      {
-        "type": "title",
-        "name": "Title"
-      },
-      {
-        "type": "description",
-        "name": "Description"
-      },
-      {
-        "type": "metafield",
-        "name": "Metafield"
-      },
-      {
-        "type": "price",
-        "name": "Price"
-      },
-      {
-        "type": "inventory_status",
-        "name": "Inventory Checker"
-      }, {
-        "type": "add_to_cart",
-        "name": "Add to Cart Button"
-      }
-    ],
-    "presets": [
-      {
-        "name": "Main Product"
-      }
-    ]
-  }
+{ "name": "Main Product", "blocks": [ { "type": "title", "name": "Title" }, { "type": "description", "name": "Description" }, { "type": "metafield", "name": "Metafield" }, { "type": "price", "name": "Price" }, { "type": "inventory_status", "name": "Inventory Checker" }, { "type": "add_to_cart", "name": "Add to Cart Button" } ] }
 {% endschema %}

@@ -7,44 +7,42 @@ document.addEventListener('DOMContentLoaded', function() {
 
   async function updateCart(line, quantity, input) {
     if (isUpdating) return;
-
     const maxAllowed = parseInt(input.getAttribute('max')) || 999;
     let finalQty = quantity;
-
-    // Hard Stock Cap
-    if (quantity > maxAllowed) {
-      finalQty = maxAllowed;
-      input.value = maxAllowed; 
-    }
+    if (quantity > maxAllowed) { finalQty = maxAllowed; input.value = maxAllowed; }
 
     isUpdating = true;
     const cartContainer = document.querySelector('#main-cart');
     if (cartContainer) cartContainer.style.opacity = '0.5';
 
     try {
-      const response = await fetch('/cart/change.js', {
+      const cartRes = await fetch('/cart.js');
+      const cartData = await cartRes.json();
+      const targetItem = cartData.items[line - 1];
+      let updates = { [targetItem.key]: finalQty };
+
+      // Sync hidden add-ons with main product quantity
+      cartData.items.forEach(item => {
+        if (item.properties && item.properties._hidden && item.properties.Parent == targetItem.variant_id) {
+          updates[item.key] = finalQty;
+        }
+      });
+
+      const response = await fetch('/cart/update.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          line: line,
-          quantity: finalQty,
-          sections: 'main-cart' 
-        })
+        body: JSON.stringify({ updates: updates, sections: 'main-cart' })
       });
 
       const data = await response.json();
-
       if (data.sections && data.sections['main-cart']) {
         const parser = new DOMParser();
         const html = parser.parseFromString(data.sections['main-cart'], 'text/html');
-        const newContent = html.querySelector('#main-cart').innerHTML;
-        document.querySelector('#main-cart').innerHTML = newContent;
+        document.querySelector('#main-cart').innerHTML = html.querySelector('#main-cart').innerHTML;
       }
-
       if (headerCartCount) headerCartCount.textContent = data.item_count;
 
     } catch (error) {
-      console.error('Update Error:', error);
       window.location.reload();
     } finally {
       isUpdating = false;

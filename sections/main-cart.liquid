@@ -68,6 +68,11 @@
                       {% if item.variant.title != 'Default Title' %}
                         <p class="tw:m-0 tw:text-[14px] tw:text-[#888]">{{ item.variant.title }}</p>
                       {% endif %}
+                      {% if item.properties['Add-ons'] and item.properties['Add-ons'] != 'None' %}
+                        <p class="tw:m-[4px_0_0_0] tw:text-[12px] tw:text-[#b35b3a] tw:font-semibold tw:italic">
+                          + {{ item.properties['Add-ons'] }}
+                        </p>
+                      {% endif %}
                     </div>
                   </div>
                 </td>
@@ -100,7 +105,7 @@
         <div class="tw:mb-[30px] tw:w-full md:tw:w-[350px]">
           <div class="tw:flex tw:justify-between tw:mb-[12px] tw:text-[14px] md:tw:text-[16px]">
             <span class="tw:text-[#666]">Subtotal:</span>
-            <span class="tw:font-medium tw:text-[#333]">{{ cart.items_subtotal_price | money }}</span>
+            <span class="tw:font-medium tw:text-[#333]">{{ cart.total_price | money }}</span>
           </div>
           <div class="tw:flex tw:justify-between tw:border-t-2 tw:border-[#e0e0e0] tw:pt-[12px] tw:text-[20px] tw:font-semibold">
             <span>Total:</span>
