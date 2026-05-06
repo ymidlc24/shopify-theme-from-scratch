@@ -1,20 +1,5 @@
 <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
 
-<style>
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  input[type="number"] {
-    -moz-appearance: textfield;
-  }
-  .addon-checkbox:checked + .addon-label {
-    border-color: #b35b3a;
-    background-color: #fdf8f6;
-  }
-</style>
-
 <div
   class="container tw:mx-auto"
   id="ProductSection-{{ section.id }}"
@@ -27,7 +12,8 @@
         alt="{{ product.title | escape }}"
         class="tw:w-[400px] tw:h-[400px] tw:object-cover tw:rounded-[8px] tw:bg-[#f5f5f5]"
         width="400"
-        height="400">
+        height="400"
+      >
     </div>
 
     <div class="tw:flex-1 tw:flex tw:flex-col">
@@ -99,10 +85,10 @@
               <div class="tw:grid tw:grid-cols-1 tw:gap-2">
                 {% if espresso %}
                   <label class="tw:cursor-pointer">
-                    <input type="checkbox" class="tw:hidden addon-checkbox" 
+                    <input type="checkbox" class="tw:hidden peer addon-checkbox" 
                           data-addon-name="Espresso Shot" 
                           data-addon-price="{{ espresso.price }}"> 
-                    <div class="addon-label tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
+                    <div class="addon-label peer-checked:tw:border-[#b35b3a] peer-checked:tw:bg-[#fdf8f6] tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
                       <span class="tw:text-[14px]">Extra Espresso Shot</span>
                       <span class="tw:text-[13px] tw:font-bold">+ {{ espresso.price | money }}</span>
                     </div>
@@ -111,10 +97,10 @@
 
                 {% if oatmilk %}
                   <label class="tw:cursor-pointer">
-                    <input type="checkbox" class="tw:hidden addon-checkbox" 
+                    <input type="checkbox" class="tw:hidden peer addon-checkbox" 
                           data-addon-name="Oat Milk" 
                           data-addon-price="{{ oatmilk.price }}">
-                    <div class="addon-label tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
+                    <div class="addon-label peer-checked:tw:border-[#b35b3a] peer-checked:tw:bg-[#fdf8f6] tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
                       <span class="tw:text-[14px]">Substitute Oat Milk</span>
                       <span class="tw:text-[13px] tw:font-bold">+ {{ oatmilk.price | money }}</span>
                     </div>
@@ -126,7 +112,13 @@
                 <h3 class="tw:font-bold">Quantity</h3>
                 <div class="tw:flex tw:items-center tw:border tw:border-[#ccc] tw:w-max tw:rounded-[4px] tw:overflow-hidden">
                   <button type="button" class="tw:px-4 tw:py-2 tw:bg-gray-50" onclick="let i=this.nextElementSibling; i.stepDown(); i.dispatchEvent(new Event('input', {bubbles:true}));">-</button>
-                  <input type="number" name="quantity" value="{% if initial_cart_qty > 0 %}{{ initial_cart_qty }}{% else %}1{% endif %}" min="1" class="tw:w-[60px] tw:text-center tw:border-none tw:outline-none tw:py-2">
+                  <input 
+                    type="number" 
+                    name="quantity" 
+                    value="{% if initial_cart_qty > 0 %}{{ initial_cart_qty }}{% else %}1{% endif %}" 
+                    min="1" 
+                    class="tw:w-[60px] tw:text-center tw:border-none tw:outline-none tw:py-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                  >
                   <button type="button" class="tw:px-4 tw:py-2 tw:bg-gray-50" onclick="let i=this.previousElementSibling; i.stepUp(); i.dispatchEvent(new Event('input', {bubbles:true}));">+</button>
                 </div>
               </div>

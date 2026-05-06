@@ -2,7 +2,6 @@
   <div class="container tw:mt-8 tw:mb-16">
     <div style="display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start;" id="MainCollectionSection">
 
-      {% comment %} EXACT CLONE OF FILTERS FROM MAIN-COLLECTION {% endcomment %}
       <aside style="width: 220px;">
         <div class="tw:flex tw:justify-between tw:items-center tw:mb-3 tw:border-b tw:border-gray-200 tw:pb-1">
           <h2 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest">Filters</h2>
@@ -10,16 +9,15 @@
         </div>
 
         <form id="FacetFiltersForm" class="tw:space-y-6">
-          {% comment %} Keep the search terms so filters don't break the search query {% endcomment %}
           <input type="hidden" name="q" value="{{ search.terms }}">
           
-          {%- for filter in search.filters -%}
+          {% for filter in search.filters %}
             <div class="tw:border-b tw:border-gray-50 tw:pb-4">
               <h3 class="tw:text-[13px] tw:font-bold tw:mb-3">{{ filter.label }}</h3>
-              {%- case filter.type -%}
-                {%- when 'list' or 'boolean' -%}
+              {% case filter.type %}
+                {% when 'list' or 'boolean' %}
                   <ul class="tw:list-none tw:p-0 tw:m-0 tw:space-y-1.5">
-                    {%- for value in filter.values -%}
+                    {% for value in filter.values %}
                       <li class="tw:flex tw:items-center tw:gap-2">
                         <input
                           type="checkbox"
@@ -32,9 +30,9 @@
                           disabled{% endif %}>
                         <span class="tw:text-[13px]">{{ value.label }} ({{ value.count }})</span>
                       </li>
-                    {%- endfor -%}
+                    {% endfor %}
                   </ul>
-                {%- when 'price_range' -%}
+                {% when 'price_range' %}
                   <div class="tw:flex tw:items-center tw:gap-1">
                     <input
                       class="tw:w-full tw:border tw:p-1 tw:text-[12px] tw:rounded-sm"
@@ -54,18 +52,18 @@
                       value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
                       {% endif %}>
                   </div>
-              {%- endcase -%}
+              {% endcase %}
             </div>
-          {%- endfor -%}
+          {% endfor %}
           <div>
             <h3 class="tw:text-[13px] tw:font-bold tw:mb-2">Sort By</h3>
             <select name="sort_by" class="tw:w-full tw:border tw:p-2 tw:text-[13px] tw:rounded-sm tw:bg-white">
-              {%- for option in search.sort_options -%}
+              {% for option in search.sort_options %}
                 <option
                   value="{{ option.value }}"
                   {% if option.value == search.sort_by %}
                   selected{% endif %}>{{ option.name }}</option>
-              {%- endfor -%}
+              {% endfor %}
             </select>
           </div>
         </form>
@@ -85,11 +83,11 @@
 
         {% if search.performed and search.results_count > 0 %}
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-            {%- for item in search.results -%}
+            {% for item in search.results %}
               {% if item.object_type == 'product' %}
                 <div>{% render 'product-card', product: item %}</div>
               {% endif %}
-            {%- endfor -%}
+            {% endfor %}
           </div>
 
           {% if paginate.pages > 1 %}
@@ -106,14 +104,6 @@
     </div>
   </div>
 {% endpaginate %}
-
-<style>
-  @media screen and (max-width: 768px) {
-    #MainCollectionSection {
-      grid-template-columns: 1fr !important;
-    }
-  }
-</style>
 
 {% schema %}
   {

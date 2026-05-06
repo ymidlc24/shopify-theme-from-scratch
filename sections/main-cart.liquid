@@ -5,17 +5,6 @@
   {% endunless %}
 {% endfor %}
 
-<style>
-  input[type="number"]::-webkit-inner-spin-button,
-  input[type="number"]::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
-  }
-  input[type="number"] {
-    -moz-appearance: textfield;
-  }
-</style>
-
 <script src="{{ 'cart-update.js' | asset_url }}" defer="defer"></script>
 
 <div id="main-cart" class="container tw:mx-auto tw:px-[20px] tw:py-[40px] tw:min-h-[65vh]">
@@ -98,7 +87,7 @@
                       value="{{ item.quantity }}" 
                       min="0" 
                       max="{{ max_qty }}"
-                      class="tw:w-[50px] tw:text-center tw:border-none tw:outline-none tw:py-1 tw:appearance-none no-arrows"
+                      class="tw:w-[50px] tw:text-center tw:border-none tw:outline-none tw:py-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     >
                     <button type="button" class="plus tw:px-3 tw:py-1 tw:bg-gray-50 hover:tw:bg-gray-100">+</button>
                   </div>

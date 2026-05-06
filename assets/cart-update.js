@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
   const cartForm = document.querySelector('#cart-form');
-  const headerCartCount = document.querySelector('.cart-count'); // Ensure your header has this class
+  const headerCartCount = document.querySelector('.cart-count');
   if (!cartForm) return;
 
   let isUpdating = false;
