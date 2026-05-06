@@ -14,8 +14,7 @@
 
         {{ 'application.css' | asset_url | stylesheet_tag }}
 
-        <script src="{{ 'add-on.js' | asset_url }}" defer></script>
-        <script src="{{ 'collection-filter.js' | asset_url }}" defer></script>
+        <script src="{{ 'collection-filters.js' | asset_url }}" defer></script>
         <script src="{{ 'theme.js' | asset_url }}" defer></script>
         <script>
           window.moneyFormat = {{ shop.money_format | json }};

@@ -1,44 +1,97 @@
-<div class="container tw:mx-auto tw:flex tw:gap-[40px] tw:mt-[40px] tw:min-h-[65vh]">
-  <aside class="tw:w-[250px] tw:shrink-0">
-    <form id="FacetFiltersForm">
-      {% for filter in collection.filters %}
-        <div class="tw:mb-[20px] tw:border-b tw:border-[#eee] tw:pb-[10px]">
-          <h3 class="tw:text-[16px] tw:mb-[10px] tw:font-bold">{{ filter.label }}</h3>
-          {% case filter.type %}
-            {% when 'list' or 'boolean' %}
-              {% for value in filter.values %}
-                <label class="tw:block tw:cursor-pointer">
-                  <input type="checkbox" name="{{ value.param_name }}" value="{{ value.value }}" 
-                    {% if value.active %}checked{% endif %}
-                    {% if value.count == 0 and value.active == false %}disabled{% endif %}>
-                  {{ value.label }} ({{ value.count }})
-                </label>
-              {% endfor %}
-            {% when 'price_range' %}
-              <div class="tw:flex tw:gap-2">
-                <input class="tw:w-full tw:border tw:p-1" name="{{ filter.min_value.param_name }}" type="number" placeholder="Min" value="{{ filter.min_value.value | money_without_currency }}">
-                <input class="tw:w-full tw:border tw:p-1" name="{{ filter.max_value.param_name }}" type="number" placeholder="Max" value="{{ filter.max_value.value | money_without_currency }}">
-              </div>
-          {% endcase %}
+<div class="container tw:mt-8 tw:mb-16">
+  <div style="display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start;" id="MainCollectionSection">
+
+    <aside style="width: 220px;">
+      <div class="tw:flex tw:justify-between tw:items-center tw:mb-3 tw:border-b tw:border-gray-200 tw:pb-1">
+        <h2 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest">Filters</h2>
+        <a href="{{ collection.url }}" class="tw:text-[10px] tw:underline tw:text-gray-400">Clear All</a>
+      </div>
+
+      <form id="FacetFiltersForm" class="tw:space-y-6">
+        {%- for filter in collection.filters -%}
+          <div class="tw:border-b tw:border-gray-50 tw:pb-4">
+            <h3 class="tw:text-[13px] tw:font-bold tw:mb-3">{{ filter.label }}</h3>
+            {%- case filter.type -%}
+              {%- when 'list' or 'boolean' -%}
+                <ul class="tw:list-none tw:p-0 tw:m-0 tw:space-y-1.5">
+                  {%- for value in filter.values -%}
+                    <li class="tw:flex tw:items-center tw:gap-2">
+                      <input
+                        type="checkbox"
+                        name="{{ value.param_name }}"
+                        value="{{ value.value }}"
+                        class="tw:w-3.5 tw:h-3.5"
+                        {% if value.active %}
+                        checked{% endif %}
+                        {% if value.count == 0 and value.active == false %}
+                        disabled{% endif %}>
+                      <span class="tw:text-[13px]">{{ value.label }} ({{ value.count }})</span>
+                    </li>
+                  {%- endfor -%}
+                </ul>
+              {%- when 'price_range' -%}
+                <div class="tw:flex tw:items-center tw:gap-1">
+                  <input
+                    class="tw:w-full tw:border tw:p-1 tw:text-[12px] tw:rounded-sm"
+                    name="{{ filter.min_value.param_name }}"
+                    type="number"
+                    placeholder="Min"
+                    {% if filter.min_value.value %}
+                    value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                    {% endif %}>
+                  <span class="tw:text-gray-300">-</span>
+                  <input
+                    class="tw:w-full tw:border tw:p-1 tw:text-[12px] tw:rounded-sm"
+                    name="{{ filter.max_value.param_name }}"
+                    type="number"
+                    placeholder="Max"
+                    {% if filter.max_value.value %}
+                    value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                    {% endif %}>
+                </div>
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+        <div>
+          <h3 class="tw:text-[13px] tw:font-bold tw:mb-2">Sort By</h3>
+          <select name="sort_by" class="tw:w-full tw:border tw:p-2 tw:text-[13px] tw:rounded-sm tw:bg-white">
+            {%- for option in collection.sort_options -%}
+              <option
+                value="{{ option.value }}"
+                {% if option.value == collection.sort_by %}
+                selected{% endif %}>{{ option.name }}</option>
+            {%- endfor -%}
+          </select>
         </div>
-      {% endfor %}
-    </form>
-  </aside>
+      </form>
+    </aside>
 
-  <div class="tw:grow" id="ProductGridContainer">
-    <div class="tw:mb-6">
-      <h1 class="tw:text-2xl tw:font-bold">{{ collection.title }}</h1>
-    </div>
+    <main id="ProductGridContainer">
+      <div class="tw:mb-6">
+        <h1 class="tw:text-2xl tw:font-bold">{{ collection.title }}</h1>
+        <p class="tw:text-xs tw:text-gray-400">{{ collection.products_count }} items</p>
+      </div>
 
-    <div class="tw:grid tw:grid-cols-3 tw:gap-[20px]">
-      {% for product in collection.products %}
-        {% render 'product-card', product: product %}
-      {% endfor %}
-    </div>
+      {% comment %} Force 3-column product grid {% endcomment %}
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+        {%- for product in collection.products -%}
+          <div>{% render 'product-card'
+, product: product %}</div>
+        {%- endfor -%}
+      </div>
+    </main>
   </div>
 </div>
 
-{%  schema  %}
+<style>
+  @media screen and (max-width: 768px) {
+    #MainCollectionSection {
+      grid-template-columns: 1fr !important;
+    }
+  }
+</style>
+
+{% schema %}
   {
     "name": "Main Collection",
     "tag": "section",
