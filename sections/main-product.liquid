@@ -134,16 +134,18 @@
               {% assign base_styles = "tw:inline-block tw:px-[36px] tw:py-[14px] tw:text-white tw:font-bold tw:uppercase tw:tracking-[0.15em] tw:leading-none tw:cursor-pointer tw:text-center tw:no-underline tw:transition-all tw:duration-300 tw:hover:translate-y-[-1px] tw:focus:outline-none tw:bg-[#b35b3a] tw:border-[3px] tw:border-[#aa4d2a] tw:rounded-[50px] tw:hover:border-[#db8160]" %}
               <button 
                 type="submit" 
+                id="AddToCart-{{ section.id }}"
                 data-variant-id="{{ initial_variant.id }}" 
                 {% unless initial_variant.available %}disabled{% endunless %} 
-                class="{{ base_styles }}"
+                class="{{ base_styles }} {% unless initial_variant.available %}tw:opacity-50 tw:cursor-not-allowed{% endunless %}"
               >
-                  
-                {% if initial_variant.available %}
-                  Add to Cart
-                {% else %}
-                  Out of Stock
-                {% endif %}
+                <span>
+                  {% if initial_variant.available %}
+                    Add to Cart
+                  {% else %}
+                    Out of Stock
+                  {% endif %}
+                </span>
               </button>
             </form>
 

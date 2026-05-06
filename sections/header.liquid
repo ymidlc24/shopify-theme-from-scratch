@@ -1,6 +1,6 @@
 {% assign visible_cart_count = 0 %}
 {% for item in cart.items %}
-  {% unless item.properties._hidden == "true" %}
+  {% unless item.properties._hidden == "true" or item.properties._hidden == true %}
     {% assign visible_cart_count = visible_cart_count | plus: item.quantity %}
   {% endunless %}
 {% endfor %}
