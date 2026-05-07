@@ -10,6 +10,11 @@
             --font-body--family: {{ settings.body_font.family }}, {{ settings.body_font.fallback_families }};
           }
         {% endstyle %}
+
+        {% if settings.favicon != blank %}
+          <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
+        {% endif %}
+
         <link rel="stylesheet" href="{{ 'theme.css' | asset_url }}" type="text/css" media="all">
 
         {{ 'application.css' | asset_url | stylesheet_tag }}

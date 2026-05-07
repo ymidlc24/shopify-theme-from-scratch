@@ -9,6 +9,7 @@
  */
 {
   "current": {
+    "favicon": "shopify://shop_images/favicon.jpg",
     "heading_font": "bricolage_grotesque_n4",
     "content_for_index": []
   }
