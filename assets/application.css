@@ -455,6 +455,12 @@
   .tw\:w-37\.5 {
     width: calc(var(--tw-spacing) * 37.5);
   }
+  .tw\:w-40 {
+    width: calc(var(--tw-spacing) * 40);
+  }
+  .tw\:w-60 {
+    width: calc(var(--tw-spacing) * 60);
+  }
   .tw\:w-100 {
     width: calc(var(--tw-spacing) * 100);
   }
@@ -556,6 +562,9 @@
   }
   .tw\:justify-center {
     justify-content: center;
+  }
+  .tw\:justify-end {
+    justify-content: flex-end;
   }
   .tw\:gap-1 {
     gap: calc(var(--tw-spacing) * 1);

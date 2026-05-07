@@ -25,7 +25,7 @@
       </div>
 
       <div class="tw:overflow-x-auto">
-        <table class="tw:w-full tw:border-collapse tw:mb-7.5">
+        <table class="tw:w-full tw:border-collapse">
           <thead class="tw:bg-[#f9f9f9] tw:border-b-2 tw:border-[#e0e0e0]">
             <tr>
               <th class="tw:text-left tw:p-3.75 tw:font-semibold tw:text-[#333] tw:text-[14px] tw:uppercase">Product</th>
@@ -102,24 +102,20 @@
         </table>
       </div>
 
-      <div class="tw:flex tw:flex-col tw:items-end tw:mt-10 tw:mb-8">
+      <div class="tw:flex tw:flex-col tw:items-end tw:mb-8">
         <div class="tw:mb-7.5 tw:w-full md:tw:w-87.5">
-          <div class="tw:flex tw:justify-between tw:mb-3 tw:text-[14px] md:tw:text-[16px]">
-            <span class="tw:text-[#666]">Subtotal:</span>
-            <span class="tw:font-medium tw:text-[#333]">{{ cart.total_price | money }}</span>
-          </div>
           <div class="tw:flex tw:justify-between tw:border-t-2 tw:border-[#e0e0e0] tw:pt-3 tw:text-[20px] tw:font-semibold">
             <span>Total:</span>
             <span>{{ cart.total_price | money }}</span>
           </div>
         </div>
 
-        <div class="tw:flex tw:flex-col md:tw:flex-row tw:gap-3.75 tw:w-full md:tw:w-auto">
-          <a href="{{ routes.all_products_collection_url }}" class="tw:inline-block tw:px-7.5 tw:py-3 tw:bg-white tw:text-[#333] tw:border-2 tw:border-[#ddd] tw:rounded-[50px] tw:text-[13px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-center tw:no-underline hover:tw:bg-gray-50">
+        <div class="tw:flex tw:flex-col md:tw:flex-row tw:gap-3.75 tw:w-full md:tw:w-auto tw:items-end">
+          <a href="{{ routes.all_products_collection_url }}" class="tw:inline-block tw:px-7.5 tw:py-3 tw:bg-white tw:text-[#333] tw:border-2 tw:border-[#ddd] tw:rounded-[50px] tw:text-[13px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-center tw:no-underline hover:tw:bg-gray-50 tw:w-60">
             {{ 'cart.continue_shopping' | t }}
           </a>
           {% assign base_styles = "tw:inline-block tw:px-9 tw:py-3.5 tw:text-white tw:font-bold tw:uppercase tw:tracking-[0.15em] tw:leading-none tw:cursor-pointer tw:text-center tw:no-underline tw:transition-all tw:duration-300 tw:hover:translate-y-[-1px] tw:focus:outline-none tw:bg-[#b35b3a] tw:border-[3px] tw:border-[#aa4d2a] tw:rounded-[50px] tw:hover:border-[#db8160]" %}
-          <button type="submit" name="checkout" class="{{ base_styles }}">
+          <button type="submit" name="checkout" class="{{ base_styles }}  tw:w-60">
             Checkout
           </button>
         </div>
