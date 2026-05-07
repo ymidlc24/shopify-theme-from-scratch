@@ -1,6 +1,32 @@
+async function refreshHeaderCartCount() {
+  const countBadge = document.querySelector('.cart-count');
+  try {
+    const res = await fetch(window.Shopify.routes.root + 'cart.js?v=' + new Date().getTime());
+    const cart = await res.json();
+    
+    const visibleQty = cart.items.reduce((acc, item) => {
+      const isHidden = item.properties?._hidden === 'true' || item.properties?._hidden === true;
+      return isHidden ? acc : acc + item.quantity;
+    }, 0);
+
+    if (countBadge) {
+      countBadge.textContent = visibleQty;
+      
+      if (visibleQty > 0) {
+        countBadge.classList.remove('tw:hidden');
+      } else {
+        countBadge.classList.add('tw:hidden');
+      }
+    }
+  } catch (e) {
+    console.error('Failed to refresh header cart count:', e);
+  }
+}
+
+window.refreshHeaderCartCount = refreshHeaderCartCount;
+
 document.addEventListener('DOMContentLoaded', function() {
   const cartForm = document.querySelector('#cart-form');
-  const headerCartCount = document.querySelector('.cart-count');
   if (!cartForm) return;
 
   let isUpdating = false;
@@ -16,9 +42,11 @@ document.addEventListener('DOMContentLoaded', function() {
       const cartRes = await fetch(window.Shopify.routes.root + 'cart.js');
       const cartData = await cartRes.json();
       const targetItem = cartData.items.find(i => i.key === itemKey);
+      if (!targetItem) throw new Error('Item not found');
       
       let updates = { [itemKey]: quantity };
       const bundleId = targetItem?.properties?._bundleId;
+      const parentBundleId = targetItem.properties?._parentBundle;
 
       if (bundleId) {
         cartData.items.forEach(item => {
@@ -36,23 +64,19 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const data = await response.json();
       
-      // 1. Update the Main Cart HTML
       if (data.sections && data.sections['main-cart']) {
         const parser = new DOMParser();
         const html = parser.parseFromString(data.sections['main-cart'], 'text/html');
-        document.querySelector('#main-cart').innerHTML = html.querySelector('#main-cart').innerHTML;
+        const newContent = html.querySelector('#main-cart');
+        if (newContent && container) {
+          container.innerHTML = newContent.innerHTML;
+        }
       }
 
-      // 2. Update Header Count (Filtered to show only visible items)
-      if (headerCartCount && data.items) {
-        const visibleQty = data.items.reduce((acc, item) => {
-          return (item.properties && item.properties._hidden === 'true') ? acc : acc + item.quantity;
-        }, 0);
-        headerCartCount.textContent = visibleQty;
-      }
+      window.refreshHeaderCartCount();
 
     } catch (error) {
-      window.location.reload();
+      console.error('Cart Update Error:', error);
     } finally {
       isUpdating = false;
       if (container) container.style.opacity = '1';
@@ -74,6 +98,18 @@ document.addEventListener('DOMContentLoaded', function() {
     if (e.target.name === 'updates[]' && !isUpdating) {
       const row = e.target.closest('tr[data-key]');
       if (row) updateCart(row.dataset.key, parseInt(e.target.value) || 0);
+    }
+  });
+
+  document.addEventListener('click', (e) => {
+    const removeLink = e.target.closest('a[href*="/cart/change"]');
+    if (!removeLink || isUpdating) return;
+
+    e.preventDefault();
+
+    const row = removeLink.closest('tr[data-key]');
+    if (row) {
+      updateCart(row.dataset.key, 0);
     }
   });
 });

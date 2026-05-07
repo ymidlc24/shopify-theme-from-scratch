@@ -73,6 +73,9 @@
 
       <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
         {% for product in collection.products %}
+          {% if product.handle == 'espresso-shot' or product.handle == 'oat-milk' %}
+            {% continue %}
+          {% endif %}
           <div>{% render 'product-card', product: product %}</div>
         {% endfor %}
       </div>

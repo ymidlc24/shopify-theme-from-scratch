@@ -86,7 +86,10 @@ document.addEventListener("submit", async (e) => {
     const data = await response.json();
 
     if (response.ok) {
-      // FIX: Since main-product adds an ARRAY, we grab the first item (The Drink)
+      if (typeof window.refreshHeaderCartCount === 'function') {
+          window.refreshHeaderCartCount();
+      }
+
       const mainItem = data.items[0];
 
       let modal = document.getElementById("cart-notification");
@@ -98,16 +101,13 @@ document.addEventListener("submit", async (e) => {
           document.body.appendChild(modal);
       }
 
-      // Inject data from the first item in the array
       modal.querySelector("#modal-product-title").textContent = mainItem.product_title;
       modal.querySelector("#modal-product-image").src = mainItem.image;
       modal.querySelector("#modal-product-qty").textContent = `Qty: ${mainItem.quantity}`;
       
-      // Calculate total for JUST the items added in THIS click
       const bundleTotalCents = data.items.reduce((sum, item) => sum + item.final_line_price, 0);
       modal.querySelector("#modal-product-price").textContent = formatMoney(bundleTotalCents);
 
-      // Update Header Bubble (Filtering out hidden add-ons)
       fetch('/cart.js?v=' + new Date().getTime())
         .then(res => res.json())
         .then(cart => {
