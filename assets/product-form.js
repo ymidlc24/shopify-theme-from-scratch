@@ -114,9 +114,8 @@ document.addEventListener("submit", async (e) => {
   const section = e.target.closest("[data-section]");
   const sectionId = section.dataset.section;
   const addonMapElement = document.getElementById(`AddonMap-${sectionId}`);
-  if (!addonMapElement) return;
 
-  const addonMap = JSON.parse(addonMapElement.textContent);
+  const addonMap = addonMapElement ? JSON.parse(addonMapElement.textContent) : {};
   const btn = e.target.querySelector('[type="submit"]');
   const originalText = "ADD TO CART";
 
