@@ -31,13 +31,11 @@ function updateProductUI(section, triggeredBy = null) {
   const mainItemInCart = cartData.items.find(item => String(item.product_id) === productId && !item.properties._hidden);
 
   if (mainItemInCart && !section.dataset.userInteracted) {
-    // Sync Variant Select
     const variantSelect = section.querySelector(".variant-select");
     if (variantSelect) {
-      variantSelect.value = mainItemInCart.variant_options; // Sync by option value (e.g., "Large")
+      variantSelect.value = mainItemInCart.variant_options;
     }
 
-    // Sync Checkboxes
     const addonString = mainItemInCart.properties["Add-ons"] || "";
     if (addonString !== "None") {
       const addonArray = addonString.split(',').map(name => name.trim());
@@ -212,7 +210,6 @@ document.addEventListener("submit", async (e) => {
         modal.classList.remove("tw:hidden");
       }
 
-      // Update local storage/ledger
       const updatedCartRes = await fetch("/cart.js");
       const updatedCart = await updatedCartRes.json();
       const inventoryLedger = document.getElementById(`CartInventoryJson-${sectionId}`);
