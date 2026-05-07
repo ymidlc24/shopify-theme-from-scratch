@@ -1,9 +1,13 @@
-<script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+<script id="CartInventoryJson-{{ section.id }}" type="application/json">
+  {{ cart | json }}
+</script>
 
 <div
   class="container tw:mx-auto"
   id="ProductSection-{{ section.id }}"
-  data-section="{{ section.id }}">
+  data-section="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+>
   <div class="tw:flex tw:gap-10 tw:my-10 tw:items-start tw:min-h-[55vh]">
     <div class="tw:shrink-0">
       <img
@@ -85,11 +89,17 @@
                 <h3 class="tw:font-bold">Add-ons</h3>
                 <div class="tw:grid tw:grid-cols-1 tw:gap-2 tw:mb-5">
                   {% if espresso %}
-                    <label class="tw:cursor-pointer">
-                      <input type="checkbox" class="tw:hidden peer addon-checkbox" 
+                    <label class="tw:cursor-pointer tw:block tw:mb-2">
+                      <input type="checkbox" 
+                            class="tw:sr-only tw:peer addon-checkbox" 
                             data-addon-name="Espresso Shot" 
                             data-addon-price="{{ espresso.price }}"> 
-                      <div class="addon-label peer-checked:tw:border-[#b35b3a] peer-checked:tw:bg-[#fdf8f6] tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
+                      
+                      <div class="addon-label tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all 
+                                  tw:bg-white tw:border-[#ccc] 
+                                  tw:peer-checked:border-[#b35b3a] tw:peer-checked:bg-[#fdf8f6] 
+                                  tw:peer-checked:border-2
+                                  hover:tw:border-[#b35b3a]">
                         <span class="tw:text-[14px]">Extra Espresso Shot</span>
                         <span class="tw:text-[13px] tw:font-bold">+ {{ espresso.price | money }}</span>
                       </div>
@@ -97,11 +107,17 @@
                   {% endif %}
 
                   {% if oatmilk %}
-                    <label class="tw:cursor-pointer">
-                      <input type="checkbox" class="tw:hidden peer addon-checkbox" 
+                    <label class="tw:cursor-pointer tw:block">
+                      <input type="checkbox" class="tw:sr-only tw:peer addon-checkbox" 
                             data-addon-name="Oat Milk" 
                             data-addon-price="{{ oatmilk.price }}">
-                      <div class="addon-label peer-checked:tw:border-[#b35b3a] peer-checked:tw:bg-[#fdf8f6] tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
+
+                      <div class="addon-label tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all 
+                                  tw:bg-white tw:border-[#ccc]
+                                  tw:peer-checked:border-[#b35b3a] 
+                                  tw:peer-checked:bg-[#fdf8f6] 
+                                  tw:peer-checked:border-2
+                                  hover:tw:border-[#b35b3a]">
                         <span class="tw:text-[14px]">Substitute Oat Milk</span>
                         <span class="tw:text-[13px] tw:font-bold">+ {{ oatmilk.price | money }}</span>
                       </div>

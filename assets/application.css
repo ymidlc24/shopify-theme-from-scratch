@@ -203,6 +203,17 @@
   }
 }
 @layer utilities {
+  .tw\:sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border-width: 0;
+  }
   .tw\:absolute {
     position: absolute;
   }
@@ -683,6 +694,9 @@
   .tw\:border-\[\#aa4d2a\] {
     border-color: #aa4d2a;
   }
+  .tw\:border-\[\#b35b3a\] {
+    border-color: #b35b3a;
+  }
   .tw\:border-\[\#ccc\] {
     border-color: #ccc;
   }
@@ -727,6 +741,9 @@
   }
   .tw\:bg-\[\#fafafa\] {
     background-color: #fafafa;
+  }
+  .tw\:bg-\[\#fdf8f6\] {
+    background-color: #fdf8f6;
   }
   .tw\:bg-\[\#fff\] {
     background-color: #fff;
@@ -1124,6 +1141,22 @@
     --tw-outline-style: none;
     outline-style: none;
   }
+  .tw\:peer-checked\:border-2 {
+    &:is(:where(.tw\:peer):checked ~ *) {
+      border-style: var(--tw-border-style);
+      border-width: 2px;
+    }
+  }
+  .tw\:peer-checked\:border-\[\#b35b3a\] {
+    &:is(:where(.tw\:peer):checked ~ *) {
+      border-color: #b35b3a;
+    }
+  }
+  .tw\:peer-checked\:bg-\[\#fdf8f6\] {
+    &:is(:where(.tw\:peer):checked ~ *) {
+      background-color: #fdf8f6;
+    }
+  }
   .tw\:hover\:-translate-y-0\.25 {
     &:hover {
       @media (hover: hover) {
@@ -1216,6 +1249,11 @@
     &:focus {
       --tw-outline-style: none;
       outline-style: none;
+    }
+  }
+  .tw\:has-checked\:bg-\[\#fdf8f6\] {
+    &:has(*:checked) {
+      background-color: #fdf8f6;
     }
   }
 }
