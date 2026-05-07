@@ -7,31 +7,31 @@
 
 <script src="{{ 'cart-update.js' | asset_url }}" defer="defer"></script>
 
-<div id="main-cart" class="container tw:mx-auto tw:px-[20px] tw:py-[40px] tw:min-h-[65vh]">
+<div id="main-cart" class="container tw:mx-auto tw:px-5 tw:py-10 tw:min-h-[65vh]">
   {% if cart.item_count == 0 %}
-    <div class="tw:text-center tw:py-[60px] tw:px-[20px]">
+    <div class="tw:text-center tw:py-15 tw:px-5">
       <h1 class="tw:text-[32px] tw:font-semibold tw:text-[#333] tw:m-0">{{ 'cart.title' | t }}</h1>
-      <p class="tw:text-[20px] tw:text-[#666] tw:mb-[30px] tw:mt-4">{{ 'cart.empty' | t }}</p>
-      <a href="{{ routes.all_products_collection_url }}" class="tw:inline-block tw:bg-[#b35b3a] tw:text-white tw:px-[40px] tw:py-[12px] tw:rounded-[50px] tw:text-[13px] tw:font-bold tw:uppercase tw:no-underline hover:tw:bg-[#964a2f]">
+      <p class="tw:text-[20px] tw:text-[#666] tw:mb-7.5 tw:mt-4">{{ 'cart.empty' | t }}</p>
+      <a href="{{ routes.all_products_collection_url }}" class="tw:inline-block tw:bg-[#b35b3a] tw:text-white tw:px-10 tw:py-3 tw:rounded-[50px] tw:text-[13px] tw:font-bold tw:uppercase tw:no-underline hover:tw:bg-[#964a2f]">
         Continue Shopping
       </a>
     </div>
   {% else %}
     
     <form action="{{ routes.cart_url }}" method="post" id="cart-form">
-      <div class="tw:flex tw:justify-between tw:items-center tw:mb-[40px] tw:border-b-2 tw:border-[#f0f0f0] tw:pb-[20px]">
+      <div class="tw:flex tw:justify-between tw:items-center tw:border-b-2 tw:border-[#f0f0f0] tw:pb-5 tw:mt-8">
         <h1 class="tw:text-[32px] tw:font-semibold tw:text-[#333] tw:m-0">{{ 'cart.title' | t }}</h1>
         <p class="tw:text-[16px] tw:text-[#888] tw:m-0">{{ visible_count }} {{ visible_count | pluralize: 'item', 'items' }}</p>
       </div>
 
       <div class="tw:overflow-x-auto">
-        <table class="tw:w-full tw:border-collapse tw:mb-[30px]">
+        <table class="tw:w-full tw:border-collapse tw:mb-7.5">
           <thead class="tw:bg-[#f9f9f9] tw:border-b-2 tw:border-[#e0e0e0]">
             <tr>
-              <th class="tw:text-left tw:p-[15px] tw:font-semibold tw:text-[#333] tw:text-[14px] tw:uppercase">Product</th>
-              <th class="tw:text-left tw:p-[15px] tw:font-semibold tw:text-[#333] tw:text-[14px] tw:uppercase">Price</th>
-              <th class="tw:text-left tw:p-[15px] tw:font-semibold tw:text-[#333] tw:text-[14px] tw:uppercase">Quantity</th>
-              <th class="tw:text-left tw:p-[15px] tw:font-semibold tw:text-[#333] tw:text-[14px] tw:uppercase">Total</th>
+              <th class="tw:text-left tw:p-3.75 tw:font-semibold tw:text-[#333] tw:text-[14px] tw:uppercase">Product</th>
+              <th class="tw:text-left tw:p-3.75 tw:font-semibold tw:text-[#333] tw:text-[14px] tw:uppercase">Price</th>
+              <th class="tw:text-left tw:p-3.75 tw:font-semibold tw:text-[#333] tw:text-[14px] tw:uppercase">Quantity</th>
+              <th class="tw:text-left tw:p-3.75 tw:font-semibold tw:text-[#333] tw:text-[14px] tw:uppercase">Total</th>
               <th></th>
             </tr>
           </thead>
@@ -57,10 +57,10 @@
               {% endif %}
 
               <tr class="tw:border-b tw:border-[#f0f0f0]" data-key="{{ item.key }}">
-                <td class="tw:p-[15px] md:tw:p-[20px_15px]">
-                  <div class="tw:flex tw:gap-[15px] tw:items-start">
+                <td class="tw:p-3.75 md:tw:p-[20px_15px]">
+                  <div class="tw:flex tw:gap-3.75 tw:items-start">
                     {% if item.image %}
-                      <img src="{{ item.image | image_url: width: 100 }}" alt="{{ item.image.alt | escape }}" class="tw:w-[60px] tw:h-[60px] md:tw:w-[80px] md:tw:h-[80px] tw:object-cover tw:rounded-[4px]" width="100" height="100">
+                      <img src="{{ item.image | image_url: width: 100 }}" alt="{{ item.image.alt | escape }}" class="tw:w-15 tw:h-15 md:tw:w-[80px] md:tw:h-[80px] tw:object-cover tw:rounded-1" width="100" height="100">
                     {% endif %}
                     <div>
                       <h3 class="tw:m-[0_0_8px_0] tw:text-[16px] tw:font-bold">
@@ -77,9 +77,9 @@
                     </div>
                   </div>
                 </td>
-                <td class="tw:p-[15px]">{{ bundle_unit_price | money }}</td>
-                <td class="tw:p-[15px]">
-                  <div class="quantity-stepper tw:flex tw:items-center tw:border tw:border-[#ccc] tw:w-max tw:rounded-[4px] tw:overflow-hidden tw:bg-white">
+                <td class="tw:p-3.75">{{ bundle_unit_price | money }}</td>
+                <td class="tw:p-3.75">
+                  <div class="quantity-stepper tw:flex tw:items-center tw:border tw:border-[#ccc] tw:w-max tw:rounded-1 tw:overflow-hidden tw:bg-white">
                     <button type="button" class="minus tw:px-3 tw:py-1 tw:bg-gray-50 hover:tw:bg-gray-100">-</button>
                     <input 
                       type="number" 
@@ -87,13 +87,13 @@
                       value="{{ item.quantity }}" 
                       min="0" 
                       max="{{ max_qty }}"
-                      class="tw:w-[50px] tw:text-center tw:border-none tw:outline-none tw:py-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                      class="tw:w-12.5 tw:text-center tw:border-none tw:outline-none tw:py-1 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                     >
                     <button type="button" class="plus tw:px-3 tw:py-1 tw:bg-gray-50 hover:tw:bg-gray-100">+</button>
                   </div>
                 </td>
-                <td class="tw:p-[15px]">{{ bundle_line_price | money }}</td>
-                <td class="tw:p-[15px]">
+                <td class="tw:p-3.75">{{ bundle_line_price | money }}</td>
+                <td class="tw:p-3.75">
                   <a href="{{ item.url_to_remove }}" class="tw:text-[#d9534f] tw:text-[14px] tw:underline hover:tw:text-[#c9302c]">Remove</a>
                 </td>
               </tr>
@@ -102,23 +102,23 @@
         </table>
       </div>
 
-      <div class="tw:flex tw:flex-col tw:items-end tw:mt-10">
-        <div class="tw:mb-[30px] tw:w-full md:tw:w-[350px]">
-          <div class="tw:flex tw:justify-between tw:mb-[12px] tw:text-[14px] md:tw:text-[16px]">
+      <div class="tw:flex tw:flex-col tw:items-end tw:mt-10 tw:mb-8">
+        <div class="tw:mb-7.5 tw:w-full md:tw:w-87.5">
+          <div class="tw:flex tw:justify-between tw:mb-3 tw:text-[14px] md:tw:text-[16px]">
             <span class="tw:text-[#666]">Subtotal:</span>
             <span class="tw:font-medium tw:text-[#333]">{{ cart.total_price | money }}</span>
           </div>
-          <div class="tw:flex tw:justify-between tw:border-t-2 tw:border-[#e0e0e0] tw:pt-[12px] tw:text-[20px] tw:font-semibold">
+          <div class="tw:flex tw:justify-between tw:border-t-2 tw:border-[#e0e0e0] tw:pt-3 tw:text-[20px] tw:font-semibold">
             <span>Total:</span>
             <span>{{ cart.total_price | money }}</span>
           </div>
         </div>
 
-        <div class="tw:flex tw:flex-col md:tw:flex-row tw:gap-[15px] tw:w-full md:tw:w-auto">
-          <a href="/collections/all" class="tw:inline-block tw:px-[30px] tw:py-[12px] tw:bg-white tw:text-[#333] tw:border-2 tw:border-[#ddd] tw:rounded-[50px] tw:text-[13px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-center tw:no-underline hover:tw:bg-gray-50">
+        <div class="tw:flex tw:flex-col md:tw:flex-row tw:gap-3.75 tw:w-full md:tw:w-auto">
+          <a href="{{ routes.all_products_collection_url }}" class="tw:inline-block tw:px-7.5 tw:py-3 tw:bg-white tw:text-[#333] tw:border-2 tw:border-[#ddd] tw:rounded-[50px] tw:text-[13px] tw:font-bold tw:uppercase tw:tracking-wider tw:text-center tw:no-underline hover:tw:bg-gray-50">
             {{ 'cart.continue_shopping' | t }}
           </a>
-          {% assign base_styles = "tw:inline-block tw:px-[36px] tw:py-[14px] tw:text-white tw:font-bold tw:uppercase tw:tracking-[0.15em] tw:leading-none tw:cursor-pointer tw:text-center tw:no-underline tw:transition-all tw:duration-300 tw:hover:translate-y-[-1px] tw:focus:outline-none tw:bg-[#b35b3a] tw:border-[3px] tw:border-[#aa4d2a] tw:rounded-[50px] tw:hover:border-[#db8160]" %}
+          {% assign base_styles = "tw:inline-block tw:px-9 tw:py-3.5 tw:text-white tw:font-bold tw:uppercase tw:tracking-[0.15em] tw:leading-none tw:cursor-pointer tw:text-center tw:no-underline tw:transition-all tw:duration-300 tw:hover:translate-y-[-1px] tw:focus:outline-none tw:bg-[#b35b3a] tw:border-[3px] tw:border-[#aa4d2a] tw:rounded-[50px] tw:hover:border-[#db8160]" %}
           <button type="submit" name="checkout" class="{{ base_styles }}">
             Checkout
           </button>

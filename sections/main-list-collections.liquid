@@ -1,13 +1,13 @@
-<div class="container tw:mx-auto tw:flex tw:gap-[40px] tw:mt-[40px] tw:min-h-[65vh]">
-  <div class="tw:grow">
+<div class="container tw:mx-auto tw:flex tw:gap-10 tw:mt-10 tw:min-h-[65vh]">
+  <div class="tw:grow tw:mt-8 tw:mb-8">
     <div class="tw:mb-6">
       <h1 class="tw:text-2xl tw:font-bold">{{ section.settings.title }}</h1>
     </div>
 
-    <div class="tw:grid tw:grid-cols-3 tw:gap-[20px]">
+    <div class="tw:grid tw:grid-cols-3 tw:gap-5">
       {% for collection in collections %}
         {% unless collection.handle == 'frontpage' %}
-          <div class="tw:text-left tw:bg-[#fff] tw:rounded-[8px] tw:p-[20px] tw:shadow-[0_2px_8px_rgba(0,0,0,0.1)] tw:transition-all tw:duration-[0.3s] tw:hover:translate-y-[-5px] tw:hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]">
+          <div class="tw:text-left tw:bg-white tw:rounded-2 tw:p-5 tw:shadow-[0_2px_8px_rgba(0,0,0,0.1)] tw:transition-all tw:duration-300 tw:hover:-translate-y-1.25 tw:hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]">
             <a href="{{ collection.url }}" class="tw:block tw:aspect-square tw:overflow-hidden tw:bg-gray-100 tw:rounded-sm">
               {% if collection.featured_image %}
                 {{ collection.featured_image | image_url: width: 600 | image_tag: 

@@ -4,13 +4,13 @@
   class="container tw:mx-auto"
   id="ProductSection-{{ section.id }}"
   data-section="{{ section.id }}">
-  <div class="tw:flex tw:gap-[40px] tw:my-[40px] tw:items-start tw:min-h-[55vh]">
+  <div class="tw:flex tw:gap-10 tw:my-10 tw:items-start tw:min-h-[55vh]">
     <div class="tw:shrink-0">
       <img
         id="product-image-{{ section.id }}"
         src="{{ product.selected_or_first_available_variant.featured_image | default: product.featured_image | image_url: width: 400 }}"
         alt="{{ product.title | escape }}"
-        class="tw:w-[400px] tw:h-[400px] tw:object-cover tw:rounded-[8px] tw:bg-[#f5f5f5]"
+        class="tw:w-100 tw:h-100 tw:object-cover tw:rounded-2 tw:bg-[#f5f5f5]"
         width="400"
         height="400"
       >
@@ -20,26 +20,26 @@
       {% for block in section.blocks %}
         {% case block.type %}
           {% when 'title' %}
-            <h1 class="tw:text-[2rem] tw:font-bold tw:mb-[16px]">{{ product.title }}</h1>
+            <h1 class="tw:text-[2rem] tw:font-bold tw:mb-4">{{ product.title }}</h1>
           {% when 'description' %}
-            <div class="tw:text-[#555] tw:text-[1rem] tw:mb-[20px]">{{ product.description }}</div>
+            <div class="tw:text-[#555] tw:text-[1rem] tw:mb-5">{{ product.description }}</div>
           {% when 'metafield' %}
             {% if product.metafields.custom.ingredients %}
-              <div class="tw:mt-0 tw:mb-[20px]">
+              <div class="tw:mt-0 tw:mb-5">
                 <h3 class="tw:font-bold">{{ 'product.ingredients' | t }}</h3>
                 <p class="tw:text-[#555] tw:text-[1rem]">{{ product.metafields.custom.ingredients }}</p>
               </div>
             {% endif %}
           {% when 'price' %}
-            <p id="product-price-{{ section.id }}" class="tw:text-[1.5rem] tw:text-[#2d2d2d] tw:mb-[24px]">{{ product.selected_or_first_available_variant.price | money }}</p>
+            <p id="product-price-{{ section.id }}" class="tw:text-[1.5rem] tw:text-[#2d2d2d] tw:mb-6">{{ product.selected_or_first_available_variant.price | money }}</p>
 
           {% when 'inventory_status' %}
-            <div id="inventory-status-{{ section.id }}" class="tw:mb-[20px] tw:hidden">
+            <div id="inventory-status-{{ section.id }}" class="tw:mb-5 tw:hidden">
               <div class="tw:flex tw:justify-between tw:items-end tw:mb-2">
                 <span id="stock-label-{{ section.id }}" class="tw:text-[12px] tw:font-bold tw:uppercase tw:tracking-widest"></span>
                 <span id="stock-count-{{ section.id }}" class="tw:text-[11px] tw:text-gray-400"></span>
               </div>
-              <div class="tw:w-full tw:h-[6px] tw:bg-gray-100 tw:rounded-full tw:overflow-hidden">
+              <div class="tw:w-full tw:h-1.5 tw:bg-gray-100 tw:rounded-full tw:overflow-hidden">
                 <div
                   id="stock-bar-{{ section.id }}"
                   class="tw:h-full tw:transition-all tw:duration-500 tw:ease-out tw:bg-[#b35b3a]"
@@ -55,7 +55,7 @@
                 {% assign initial_cart_qty = item.quantity %}{% endif %}
             {% endfor %}
 
-            <form action="/cart/add" method="post" id="product-form">
+            <form action="{{ routes.cart_add_url }}" method="post" id="product-form">
               {% assign espresso = all_products['espresso-shot'] %}
               {% assign oatmilk = all_products['oat-milk'] %}
               
@@ -67,11 +67,11 @@
               </script>
 
               {% unless product.has_only_default_variant %}
-                <div class="tw:mb-[20px]">
+                <div class="tw:mb-5">
                   {% for option in product.options_with_values %}
-                    <div class="tw:mb-[10px]">
+                    <div class="tw:mb-2.5">
                       <h3 class="tw:font-bold">{{ option.name }}</h3>
-                      <select class="variant-select tw:p-[8px] tw:w-full tw:rounded-[4px] tw:border tw:border-[#ccc] tw:bg-white" data-index="option{{ forloop.index }}">
+                      <select class="variant-select tw:p-2 tw:w-full tw:rounded-1 tw:border tw:border-[#ccc] tw:bg-white" data-index="option{{ forloop.index }}">
                         {% for value in option.values %}
                           <option value="{{ value | escape }}" {% if option.selected_value == value %}selected{% endif %}>{{ value }}</option>
                         {% endfor %}
@@ -108,16 +108,16 @@
                 {% endif %}
               </div>
 
-              <div class="tw:mb-[20px] tw:mt-[20px]">
+              <div class="tw:mb-5 tw:mt-5">
                 <h3 class="tw:font-bold">Quantity</h3>
-                <div class="tw:flex tw:items-center tw:border tw:border-[#ccc] tw:w-max tw:rounded-[4px] tw:overflow-hidden">
+                <div class="tw:flex tw:items-center tw:border tw:border-[#ccc] tw:w-max tw:rounded-1 tw:overflow-hidden">
                   <button type="button" class="tw:px-4 tw:py-2 tw:bg-gray-50" onclick="let i=this.nextElementSibling; i.stepDown(); i.dispatchEvent(new Event('input', {bubbles:true}));">-</button>
                   <input 
                     type="number" 
                     name="quantity" 
                     value="{% if initial_cart_qty > 0 %}{{ initial_cart_qty }}{% else %}1{% endif %}" 
                     min="1" 
-                    class="tw:w-[60px] tw:text-center tw:border-none tw:outline-none tw:py-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    class="tw:w-15 tw:text-center tw:border-none tw:outline-none tw:py-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                   >
                   <button type="button" class="tw:px-4 tw:py-2 tw:bg-gray-50" onclick="let i=this.previousElementSibling; i.stepUp(); i.dispatchEvent(new Event('input', {bubbles:true}));">+</button>
                 </div>

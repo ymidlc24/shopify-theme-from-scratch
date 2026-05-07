@@ -2,7 +2,7 @@
   Usage: {% render 'product-card', product: product %}
 {% endcomment %}
 
-<div class="tw:text-left tw:bg-[#fff] tw:rounded-[8px] tw:p-[20px] tw:shadow-[0_2px_8px_rgba(0,0,0,0.1)] tw:transition-all tw:duration-[0.3s] tw:hover:translate-y-[-5px] tw:hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]">
+<div class="tw:text-left tw:bg-white tw:rounded-2 tw:p-5 tw:shadow-[0_2px_8px_rgba(0,0,0,0.1)] tw:transition-all tw:duration-300 tw:hover:-translate-y-1.25 tw:hover:shadow-[0_4px_16px_rgba(0,0,0,0.2)]">
   <a href="{{ product.url }}" class="tw:no-underline tw:text-inherit">
     <img 
       src="{{ product.featured_image | image_url: width: 400 }}" 
