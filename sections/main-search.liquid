@@ -1,8 +1,7 @@
 {% paginate search.results by 12 %}
   <div class="container tw:mt-8 tw:mb-16">
-    <div style="display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start;" id="MainCollectionSection">
-
-      <aside style="width: 220px;">
+    <div style="display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start; margin-top: 32px; margin-bottom: 32px;" id="MainCollectionSection">
+      <aside style="width: 220px; margin-top: 48px;">
         <div class="tw:flex tw:justify-between tw:items-center tw:mb-3 tw:border-b tw:border-gray-200 tw:pb-1">
           <h2 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest">Filters</h2>
           <a href="{{ search.url }}&q={{ search.terms }}" class="tw:text-[10px] tw:underline tw:text-gray-400">Clear All</a>

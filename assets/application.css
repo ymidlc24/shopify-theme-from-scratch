@@ -269,14 +269,23 @@
   .tw\:mt-10 {
     margin-top: calc(var(--tw-spacing) * 10);
   }
+  .tw\:mt-100 {
+    margin-top: calc(var(--tw-spacing) * 100);
+  }
   .tw\:mt-\[8px\] {
     margin-top: 8px;
   }
   .tw\:mt-\[20px\] {
     margin-top: 20px;
   }
+  .tw\:mt-\[30px\] {
+    margin-top: 30px;
+  }
   .tw\:mt-\[40px\] {
     margin-top: 40px;
+  }
+  .tw\:mt-\[48px\] {
+    margin-top: 48px;
   }
   .tw\:mb-1 {
     margin-bottom: calc(var(--tw-spacing) * 1);
