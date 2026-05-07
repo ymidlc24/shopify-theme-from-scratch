@@ -135,7 +135,7 @@
                     name="quantity" 
                     value="{% if initial_cart_qty > 0 %}{{ initial_cart_qty }}{% else %}1{% endif %}" 
                     min="1" 
-                    class="tw:w-15 tw:text-center tw:border-none tw:outline-none tw:py-2 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    class="tw:w-15 tw:text-center tw:border-none tw:outline-none tw:py-2 tw-[appearance:textfield] tw:[&::-webkit-outer-spin-button]:appearance-none tw:[&::-webkit-inner-spin-button]:appearance-none"
                   >
                   <button type="button" class="tw:px-4 tw:py-2 tw:bg-gray-50" onclick="let i=this.previousElementSibling; i.stepUp(); i.dispatchEvent(new Event('input', {bubbles:true}));">+</button>
                 </div>

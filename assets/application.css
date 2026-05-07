@@ -445,6 +445,9 @@
   .tw\:list-none {
     list-style-type: none;
   }
+  .tw\:\[appearance\:textfield\] {
+    appearance: textfield;
+  }
   .tw\:grid-cols-1 {
     grid-template-columns: repeat(1, minmax(0, 1fr));
   }
@@ -1082,6 +1085,16 @@
     &:focus {
       --tw-outline-style: none;
       outline-style: none;
+    }
+  }
+  .tw\:\[\&\:\:-webkit-inner-spin-button\]\:appearance-none {
+    &::-webkit-inner-spin-button {
+      appearance: none;
+    }
+  }
+  .tw\:\[\&\:\:-webkit-outer-spin-button\]\:appearance-none {
+    &::-webkit-outer-spin-button {
+      appearance: none;
     }
   }
 }
