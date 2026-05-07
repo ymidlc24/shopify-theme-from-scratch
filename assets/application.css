@@ -1124,6 +1124,14 @@
     --tw-outline-style: none;
     outline-style: none;
   }
+  .tw\:hover\:-translate-y-0\.25 {
+    &:hover {
+      @media (hover: hover) {
+        --tw-translate-y: calc(var(--tw-spacing) * -0.25);
+        translate: var(--tw-translate-x) var(--tw-translate-y);
+      }
+    }
+  }
   .tw\:hover\:-translate-y-1\.25 {
     &:hover {
       @media (hover: hover) {

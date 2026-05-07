@@ -56,16 +56,6 @@
             {% endfor %}
 
             <form action="{{ routes.cart_add_url }}" method="post" id="product-form">
-              {% assign espresso = all_products['espresso-shot'] %}
-              {% assign oatmilk = all_products['oat-milk'] %}
-              
-              <script type="application/json" id="AddonMap-{{ section.id }}">
-                {
-                  "Espresso Shot": {{ espresso.selected_or_first_available_variant.id | default: 0 | json }},
-                  "Oat Milk": {{ oatmilk.selected_or_first_available_variant.id | default: 0 | json }}
-                }
-              </script>
-
               {% unless product.has_only_default_variant %}
                 <div class="tw:mb-5">
                   {% for option in product.options_with_values %}
@@ -81,32 +71,44 @@
                 </div>
               {% endunless %}
 
-              <h3 class="tw:font-bold">Customize Your Drink</h3>
-              <div class="tw:grid tw:grid-cols-1 tw:gap-2">
-                {% if espresso %}
-                  <label class="tw:cursor-pointer">
-                    <input type="checkbox" class="tw:hidden peer addon-checkbox" 
-                          data-addon-name="Espresso Shot" 
-                          data-addon-price="{{ espresso.price }}"> 
-                    <div class="addon-label peer-checked:tw:border-[#b35b3a] peer-checked:tw:bg-[#fdf8f6] tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
-                      <span class="tw:text-[14px]">Extra Espresso Shot</span>
-                      <span class="tw:text-[13px] tw:font-bold">+ {{ espresso.price | money }}</span>
-                    </div>
-                  </label>
-                {% endif %}
+              {% unless product.tags contains 'Food' %}
+                {% assign espresso = all_products['espresso-shot'] %}
+                {% assign oatmilk = all_products['oat-milk'] %}
+                
+                <script type="application/json" id="AddonMap-{{ section.id }}">
+                  {
+                    "Espresso Shot": {{ espresso.selected_or_first_available_variant.id | default: 0 | json }},
+                    "Oat Milk": {{ oatmilk.selected_or_first_available_variant.id | default: 0 | json }}
+                  }
+                </script>
 
-                {% if oatmilk %}
-                  <label class="tw:cursor-pointer">
-                    <input type="checkbox" class="tw:hidden peer addon-checkbox" 
-                          data-addon-name="Oat Milk" 
-                          data-addon-price="{{ oatmilk.price }}">
-                    <div class="addon-label peer-checked:tw:border-[#b35b3a] peer-checked:tw:bg-[#fdf8f6] tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
-                      <span class="tw:text-[14px]">Substitute Oat Milk</span>
-                      <span class="tw:text-[13px] tw:font-bold">+ {{ oatmilk.price | money }}</span>
-                    </div>
-                  </label>
-                {% endif %}
-              </div>
+                <h3 class="tw:font-bold">Add-ons</h3>
+                <div class="tw:grid tw:grid-cols-1 tw:gap-2 tw:mb-5">
+                  {% if espresso %}
+                    <label class="tw:cursor-pointer">
+                      <input type="checkbox" class="tw:hidden peer addon-checkbox" 
+                            data-addon-name="Espresso Shot" 
+                            data-addon-price="{{ espresso.price }}"> 
+                      <div class="addon-label peer-checked:tw:border-[#b35b3a] peer-checked:tw:bg-[#fdf8f6] tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
+                        <span class="tw:text-[14px]">Extra Espresso Shot</span>
+                        <span class="tw:text-[13px] tw:font-bold">+ {{ espresso.price | money }}</span>
+                      </div>
+                    </label>
+                  {% endif %}
+
+                  {% if oatmilk %}
+                    <label class="tw:cursor-pointer">
+                      <input type="checkbox" class="tw:hidden peer addon-checkbox" 
+                            data-addon-name="Oat Milk" 
+                            data-addon-price="{{ oatmilk.price }}">
+                      <div class="addon-label peer-checked:tw:border-[#b35b3a] peer-checked:tw:bg-[#fdf8f6] tw:flex tw:justify-between tw:items-center tw:p-3 tw:border tw:rounded-md tw:transition-all hover:tw:border-[#b35b3a]">
+                        <span class="tw:text-[14px]">Substitute Oat Milk</span>
+                        <span class="tw:text-[13px] tw:font-bold">+ {{ oatmilk.price | money }}</span>
+                      </div>
+                    </label>
+                  {% endif %}
+                </div>
+              {% endunless %}
 
               <div class="tw:mb-5 tw:mt-5">
                 <h3 class="tw:font-bold">Quantity</h3>
@@ -123,7 +125,7 @@
                 </div>
               </div>
 
-              {% assign base_styles = "tw:inline-block tw:px-[36px] tw:py-[14px] tw:text-white tw:font-bold tw:uppercase tw:tracking-[0.15em] tw:leading-none tw:cursor-pointer tw:text-center tw:no-underline tw:transition-all tw:duration-300 tw:hover:translate-y-[-1px] tw:focus:outline-none tw:bg-[#b35b3a] tw:border-[3px] tw:border-[#aa4d2a] tw:rounded-[50px] tw:hover:border-[#db8160]" %}
+              {% assign base_styles = "tw:inline-block tw:px-9 tw:py-3.5 tw:text-white tw:font-bold tw:uppercase tw:tracking-[0.15em] tw:leading-none tw:cursor-pointer tw:text-center tw:no-underline tw:transition-all tw:duration-300 tw:hover:-translate-y-0.25 tw:focus:outline-none tw:bg-[#b35b3a] tw:border-[3px] tw:border-[#aa4d2a] tw:rounded-[50px] tw:hover:border-[#db8160]" %}
               <button 
                 type="submit" 
                 id="AddToCart-{{ section.id }}"
