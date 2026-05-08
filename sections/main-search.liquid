@@ -1,108 +1,109 @@
-{% paginate search.results by 12 %}
-  <div class="container tw:mt-8 tw:mb-16">
-    <div style="display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start; margin-top: 32px; margin-bottom: 32px;" id="MainCollectionSection">
-      <aside style="width: 220px; margin-top: 48px;">
-        <div class="tw:flex tw:justify-between tw:items-center tw:mb-3 tw:border-b tw:border-gray-200 tw:pb-1">
-          <h2 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest">Filters</h2>
-          <a href="{{ search.url }}&q={{ search.terms }}" class="tw:text-[10px] tw:underline tw:text-gray-400">Clear All</a>
-        </div>
+<div class="container tw:mt-8 tw:mb-16">
+  <div style="display: grid; grid-template-columns: 220px 1fr; gap: 40px; align-items: start; margin-top: 32px; margin-bottom: 32px;" id="MainCollectionSection">
+    <aside style="width: 220px; margin-top: 48px;">
+      <div class="tw:flex tw:justify-between tw:items-center tw:mb-3 tw:border-b tw:border-gray-200 tw:pb-1">
+        <h2 class="tw:text-xs tw:font-bold tw:uppercase tw:tracking-widest">Filters</h2>
+        <a href="{{ search.url }}&q={{ search.terms }}" class="tw:text-[10px] tw:underline tw:text-gray-400">Clear All</a>
+      </div>
 
-        <form id="FacetFiltersForm" class="tw:space-y-6">
-          <input type="hidden" name="q" value="{{ search.terms }}">
-          
-          {% for filter in search.filters %}
-            <div class="tw:border-b tw:border-gray-50 tw:pb-4">
-              <h3 class="tw:text-[13px] tw:font-bold tw:mb-3">{{ filter.label }}</h3>
-              {% case filter.type %}
-                {% when 'list' or 'boolean' %}
-                  <ul class="tw:list-none tw:p-0 tw:m-0 tw:space-y-1.5">
-                    {% for value in filter.values %}
-                      <li class="tw:flex tw:items-center tw:gap-2">
-                        <input
-                          type="checkbox"
-                          name="{{ value.param_name }}"
-                          value="{{ value.value }}"
-                          class="tw:w-3.5 tw:h-3.5"
-                          {% if value.active %}
-                          checked{% endif %}
-                          {% if value.count == 0 and value.active == false %}
-                          disabled{% endif %}>
-                        <span class="tw:text-[13px]">{{ value.label }} ({{ value.count }})</span>
-                      </li>
-                    {% endfor %}
-                  </ul>
-                {% when 'price_range' %}
-                  <div class="tw:flex tw:items-center tw:gap-1">
-                    <input
-                      class="tw:w-full tw:border tw:p-1 tw:text-[12px] tw:rounded-sm"
-                      name="{{ filter.min_value.param_name }}"
-                      type="number"
-                      placeholder="Min"
-                      {% if filter.min_value.value %}
-                      value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
-                      {% endif %}>
-                    <span class="tw:text-gray-300">-</span>
-                    <input
-                      class="tw:w-full tw:border tw:p-1 tw:text-[12px] tw:rounded-sm"
-                      name="{{ filter.max_value.param_name }}"
-                      type="number"
-                      placeholder="Max"
-                      {% if filter.max_value.value %}
-                      value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
-                      {% endif %}>
-                  </div>
-              {% endcase %}
-            </div>
-          {% endfor %}
-          <div>
-            <h3 class="tw:text-[13px] tw:font-bold tw:mb-2">Sort By</h3>
-            <select name="sort_by" class="tw:w-full tw:border tw:p-2 tw:text-[13px] tw:rounded-sm tw:bg-white">
-              {% for option in search.sort_options %}
-                <option
-                  value="{{ option.value }}"
-                  {% if option.value == search.sort_by %}
-                  selected{% endif %}>{{ option.name }}</option>
-              {% endfor %}
-            </select>
+      <form id="FacetFiltersForm" class="tw:space-y-6">
+        <input type="hidden" name="q" value="{{ search.terms }}">
+        
+        {% for filter in search.filters %}
+          <div class="tw:border-b tw:border-gray-50 tw:pb-4">
+            <h3 class="tw:text-[13px] tw:font-bold tw:mb-3">{{ filter.label }}</h3>
+            {% case filter.type %}
+              {% when 'list' or 'boolean' %}
+                <ul class="tw:list-none tw:p-0 tw:m-0 tw:space-y-1.5">
+                  {% for value in filter.values %}
+                    <li class="tw:flex tw:items-center tw:gap-2">
+                      <input
+                        type="checkbox"
+                        name="{{ value.param_name }}"
+                        value="{{ value.value }}"
+                        class="tw:w-3.5 tw:h-3.5"
+                        {% if value.active %}
+                        checked{% endif %}
+                        {% if value.count == 0 and value.active == false %}
+                        disabled{% endif %}>
+                      <span class="tw:text-[13px]">{{ value.label }} ({{ value.count }})</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% when 'price_range' %}
+                <div class="tw:flex tw:items-center tw:gap-1">
+                  <input
+                    class="tw:w-full tw:border tw:p-1 tw:text-[12px] tw:rounded-sm"
+                    name="{{ filter.min_value.param_name }}"
+                    type="number"
+                    placeholder="Min"
+                    {% if filter.min_value.value %}
+                    value="{{ filter.min_value.value | money_without_currency | replace: ',', '' }}"
+                    {% endif %}>
+                  <span class="tw:text-gray-300">-</span>
+                  <input
+                    class="tw:w-full tw:border tw:p-1 tw:text-[12px] tw:rounded-sm"
+                    name="{{ filter.max_value.param_name }}"
+                    type="number"
+                    placeholder="Max"
+                    {% if filter.max_value.value %}
+                    value="{{ filter.max_value.value | money_without_currency | replace: ',', '' }}"
+                    {% endif %}>
+                </div>
+            {% endcase %}
           </div>
-        </form>
-      </aside>
-
-      <main id="ProductGridContainer">
-        <div class="tw:mb-6">
-          <h1 class="tw:text-2xl tw:font-bold">
-            {% if search.performed %}
-              Results for "{{ search.terms }}"
-            {% else %}
-              Search our store
-            {% endif %}
-          </h1>
-          <p class="tw:text-xs tw:text-gray-400">{{ search.results_count }} items</p>
-        </div>
-
-        {% if search.performed and search.results_count > 0 %}
-          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
-            {% for item in search.results %}
-              {% if item.object_type == 'product' %}
-                <div>{% render 'product-card', product: item %}</div>
-              {% endif %}
+        {% endfor %}
+        <div>
+          <h3 class="tw:text-[13px] tw:font-bold tw:mb-2">Sort By</h3>
+          <select name="sort_by" class="tw:w-full tw:border tw:p-2 tw:text-[13px] tw:rounded-sm tw:bg-white">
+            {% for option in search.sort_options %}
+              <option
+                value="{{ option.value }}"
+                {% if option.value == search.sort_by %}
+                selected{% endif %}>{{ option.name }}</option>
             {% endfor %}
-          </div>
+          </select>
+        </div>
+      </form>
+    </aside>
 
-          {% if paginate.pages > 1 %}
-            <div class="tw:mt-10 tw:flex tw:justify-center">
-              {{ paginate | default_pagination }}
-            </div>
+    <main id="ProductGridContainer">
+      <div class="tw:mb-6">
+        <h1 class="tw:text-2xl tw:font-bold">
+          {% if search.performed %}
+            Results for "{{ search.terms }}"
+          {% else %}
+            Search our store
           {% endif %}
-        {% else %}
-          <div class="tw:py-20 tw:text-center">
-            <p class="tw:text-gray-500">No products found. Try a different search term.</p>
+        </h1>
+        <p class="tw:text-xs tw:text-gray-400">{{ search.results_count }} items</p>
+      </div>
+
+      {% if search.performed and search.results_count > 0 %}
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+          {% for item in search.results %}
+            {% if item.object_type == 'product' %}
+              {% if item.handle == 'espresso-shot' or item.handle == 'oat-milk' %}
+                {% continue %}
+              {% endif %}
+              <div>{% render 'product-card', product: item %}</div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        {% comment %} {% if paginate.pages > 1 %}
+          <div class="tw:mt-10 tw:flex tw:justify-center">
+            {{ paginate | default_pagination }}
           </div>
-        {% endif %}
-      </main>
-    </div>
+        {% endif %} {% endcomment %}
+      {% else %}
+        <div class="tw:py-20 tw:text-center">
+          <p class="tw:text-gray-500">No products found. Try a different search term.</p>
+        </div>
+      {% endif %}
+    </main>
   </div>
-{% endpaginate %}
+</div>
 
 {% schema %}
   {
