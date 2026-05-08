@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', function() {
       
       let updates = { [itemKey]: quantity };
       const bundleId = targetItem?.properties?._bundleId;
-      const parentBundleId = targetItem.properties?._parentBundle;
 
       if (bundleId) {
         cartData.items.forEach(item => {
