@@ -12,7 +12,8 @@
     <div class="tw:text-center tw:py-15 tw:px-5">
       <h1 class="tw:text-[32px] tw:font-semibold tw:text-[#333] tw:m-0">{{ 'cart.title' | t }}</h1>
       <p class="tw:text-[20px] tw:text-[#666] tw:mb-7.5 tw:mt-4">{{ 'cart.empty' | t }}</p>
-      <a href="{{ routes.all_products_collection_url }}" class="tw:inline-block tw:bg-[#b35b3a] tw:text-white tw:px-10 tw:py-3 tw:rounded-[50px] tw:text-[13px] tw:font-bold tw:uppercase tw:no-underline hover:tw:bg-[#964a2f]">
+      {% assign btn_class = "tw:inline-block tw:px-[36px] tw:py-[14px] tw:text-white tw:font-bold tw:uppercase tw:tracking-[0.15em] tw:leading-none tw:cursor-pointer tw:text-center tw:no-underline tw:transition-all tw:duration-300 tw:hover:translate-y-[-1px] tw:focus:outline-none tw:bg-[#b35b3a] tw:border-[3px] tw:border-[#aa4d2a] tw:rounded-[50px] tw:hover:border-[#db8160] tw:text-[13px]" %}
+      <a href="{{ routes.all_products_collection_url }}" class="{{ btn_class }}">
         Continue Shopping
       </a>
     </div>
